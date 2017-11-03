@@ -1,0 +1,11 @@
+<litepal>
+    <dbname value="cool_weather"/>
+    <version value="1"/>
+
+    <list>
+        <mapping class="com.example.finaldesig.db.Province"/>
+        <mapping class="com.example.finaldesig.db.City"/>
+        <mapping class="com.example.finaldesig.db.County"/>
+        <mapping class="com.example.finaldesig.db.CityCode"/>
+    </list>
+</litepal>
