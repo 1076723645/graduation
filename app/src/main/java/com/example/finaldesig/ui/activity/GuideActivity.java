@@ -34,7 +34,7 @@ public class GuideActivity extends AppCompatActivity {
     private static final String ACTIVITY_TAG="LogDemo";
     private LocationClient mlocationClient;
     private String addressCity;//定位城市
-    private  SharedPreferences setting;
+    private SharedPreferences setting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class GuideActivity extends AppCompatActivity {
         mlocationClient = new LocationClient(getApplicationContext());
         mlocationClient.registerLocationListener(new MyLocationListener());
         SDKInitializer.initialize(getApplicationContext());
-        PermissionUtil.requestPermission(this);//每次启动都请求权限
+        PermissionUtil.handPermission(this);
         LocationClientOption option =new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setIsNeedAddress(true);

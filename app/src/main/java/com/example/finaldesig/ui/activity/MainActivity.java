@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
             List<CityCode> cityCodes = DataSupport.where("cityName=?",addressCity).find(CityCode.class);
             contentList.add(cityCodes.get(0).getCityCode());
         }
-        contentList.add("页面一");
-        contentList.add("页面二");
+        contentList.add("CN101010100");
+        contentList.add("CN101091101");
     }
 
     public void onRequestPermissionsResult(final int requestCode, String[] permissions,
