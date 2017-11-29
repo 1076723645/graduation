@@ -101,7 +101,7 @@ public class GuideActivity extends AppCompatActivity {
         protected void onPostExecute(String json) {
             boolean result = false;
             result = Utility.handleCityCodeResponce(json);
-            if (result == true) {
+            if (result) {
                 LogUtil.i(ACTIVITY_TAG,"第一次打开");
                 setting.edit().putBoolean("FIRST", false).commit();
                 Intent intent = new Intent(GuideActivity.this, MainActivity.class);

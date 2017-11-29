@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/bg_sunny_night"
         />
 
     <TextView

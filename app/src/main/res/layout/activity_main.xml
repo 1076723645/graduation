@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="com.example.finaldesig.ui.activity.MainActivity">
 
 
@@ -16,9 +17,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.1dp"
+        android:layout_height="0.5dp"
         android:layout_above="@+id/text_menu"
-        android:background="@color/darkgrey"/>
+        android:background="@color/line_color"/>
     <TextView
         android:id="@+id/text_menu"
         android:layout_width="match_parent"

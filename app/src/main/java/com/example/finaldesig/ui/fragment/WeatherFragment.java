@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,7 +15,11 @@ import android.widget.TextView;
 
 import com.example.finaldesig.R;
 import com.example.finaldesig.gson.Forecast;
+import com.example.finaldesig.gson.HourlyForecast;
 import com.example.finaldesig.gson.Weather;
+import com.example.finaldesig.presenter.CircleBar;
+import com.example.finaldesig.presenter.MiuiWeatherView;
+import com.example.finaldesig.presenter.WeatherBean;
 import com.example.finaldesig.util.DataUtil;
 import com.example.finaldesig.util.HttpUtil;
 import com.example.finaldesig.util.LogUtil;
@@ -30,7 +35,8 @@ import okhttp3.Response;
 
 public class WeatherFragment extends Fragment {
 
-    private List<String> list = new ArrayList<String>();
+    private List<String> list = new ArrayList<>();
+    private List<WeatherBean> data = new ArrayList<>();
     private int flag;
     private static final String ActLog = "ActivityLog";
     public SwipeRefreshLayout swipeRefresh;
@@ -45,12 +51,15 @@ public class WeatherFragment extends Fragment {
     private ImageView bg;
 
     private LinearLayout forecastLayout;
+    private MiuiWeatherView weatherView;
 
-    private TextView aqiText;
-    private TextView pm25Text;
+    private CircleBar aqiBar;
+    private CircleBar pmBar;
+
     private TextView comfortText;
     private TextView carWashText;
     private TextView sportText;
+    private TextView qul_more;
     private String weatherId;
 
     @Override
@@ -70,6 +79,7 @@ public class WeatherFragment extends Fragment {
         // TODO Auto-generated method stub
         View view = inflater.inflate(R.layout.fragment_weather, container,false);
         forecastLayout = (LinearLayout)view.findViewById(R.id.forest_layout);
+        weatherView = (MiuiWeatherView)view.findViewById(R.id.weather);
         initView(view);
         initData();
         return view;
@@ -84,6 +94,9 @@ public class WeatherFragment extends Fragment {
         flLv = (TextView)v.findViewById(R.id.fl_lv);
         tmp = (TextView)v.findViewById(R.id.weather_temp);
         bg = (ImageView)v.findViewById(R.id.weather_bg);
+        aqiBar = (CircleBar)v.findViewById(R.id.AQI_bar);
+        pmBar = (CircleBar)v.findViewById(R.id.PM25_bar);
+        qul_more = (TextView)v.findViewById(R.id.qul_more);
     }
 
     public void initData(){
@@ -169,6 +182,25 @@ public class WeatherFragment extends Fragment {
             maxText.setText(forecast.temperature.max);
             minText.setText(forecast.temperature.min);
             forecastLayout.addView(v);
+        }//未来3天天气预报
+
+        for (int i=0; i<weather.hourlyForecast.size();i++){
+            HourlyForecast hourly = weather.hourlyForecast.get(i);
+            int temp = Integer.parseInt(hourly.temperature);
+            String time = hourly.time_data.substring(hourly.time_data.length()-5,hourly.time_data.length());
+            String info = DataUtil.getWeather(hourly.more.info);
+            WeatherBean weatherBean = new WeatherBean(info, temp, time);
+            data.add(weatherBean);
         }
+        weatherView.setData(data);//24小时天气预报
+
+        aqiBar.setText("AQI");
+        LogUtil.i("aqi", weather.aqi.city.aqi);
+        LogUtil.i("pm25", weather.aqi.city.pm25);
+        aqiBar.setDesText(weather.aqi.city.aqi);
+        pmBar.setText("PM25");
+        pmBar.setDesText(weather.aqi.city.pm25);
+        pmBar.setShowText("首要污染物");//空气质量
     }
+
 }

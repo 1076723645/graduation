@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 
 import com.example.finaldesig.R;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private String addressCity;//定位城市
     private List<String> contentList = new ArrayList<String>(); //内容链表
     private List<WeatherFragment> fragmentList = new ArrayList<WeatherFragment>(); //碎片链表
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         }
         adapter = new FragAdapter(getSupportFragmentManager(), (ArrayList<WeatherFragment>) fragmentList);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
         addCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initList(){
-        if (addressCity!=null){
+        if (!addressCity.equals("")){
             List<CityCode> cityCodes = DataSupport.where("cityName=?",addressCity).find(CityCode.class);
             contentList.add(cityCodes.get(0).getCityCode());
         }

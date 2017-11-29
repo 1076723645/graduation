@@ -1,6 +1,7 @@
 package com.example.finaldesig.util;
 
 import com.example.finaldesig.R;
+import com.example.finaldesig.presenter.WeatherBean;
 
 import java.util.Calendar;
 
@@ -9,6 +10,8 @@ import java.util.Calendar;
  */
 
 public class DataUtil {
+
+     String[] weathers = WeatherBean.getAllWeathers();//SUN, RAIN, CLOUDY, SUN_CLOUD, SNOW, THUNDER
     /**
      * <pre>
      * 根据指定的日期字符串获取星期几
@@ -84,5 +87,21 @@ public class DataUtil {
             return R.drawable.daily_forecast_foggy;
         }
         return R.drawable.daily_forecast_cloudy;
+    }
+    public static String getWeather(String s){
+        String[] weathers = WeatherBean.getAllWeathers();//SUN, RAIN, CLOUDY, SUN_CLOUD, SNOW, THUNDER
+        if (s.equals("晴")){
+            return weathers[0];
+        }else if (s.contains("雨")){
+            return weathers[1];
+        }else if (s.contains("阴")){
+            return weathers[2];
+        }else if (s.contains("雪")) {
+            return weathers[4];
+        }
+        else if (s.contains("雷")) {
+            return weathers[5];
+        }
+        return weathers[3];
     }
 }
