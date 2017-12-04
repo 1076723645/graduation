@@ -21,9 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         app:line_interval="60dp"
-        app:min_point_height="60dp"
-        app:background_color="#ffffff"/>
+        app:min_point_height="60dp" />
 
     <View
         android:layout_width="match_parent"

@@ -97,13 +97,13 @@ public class CircleBar extends View {
         mTextshow = "空气质量指数";
         mText = "AQI";
         mTextDes = "78";
-        mSweepAngle = 100;
+        mSweepAngle = 300;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawArc(mColorWheelRectangle, -225, 270, false, mDefaultWheelPaint);//画外接的圆环
-        canvas.drawArc(mColorWheelRectangle, -225, mSweepAngle, false, mColorWheelPaint);//画圆环
+        canvas.drawArc(mColorWheelRectangle, -225, Integer.parseInt(mTextDes)/mSweepAngle*270, false, mColorWheelPaint);//画圆环
         Rect bounds = new Rect();
 
         textPaint.getTextBounds(mText, 0, mText.length(), bounds);

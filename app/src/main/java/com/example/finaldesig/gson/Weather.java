@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Administrator on 2017/10/26.
  */
 
-public class Weather {
+public class Weather{
 
     public String status;
 

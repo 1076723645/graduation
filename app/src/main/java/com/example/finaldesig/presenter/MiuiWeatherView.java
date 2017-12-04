@@ -1,7 +1,6 @@
 package com.example.finaldesig.presenter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +16,6 @@ import android.graphics.RectF;
 
 import android.support.v4.util.Pair;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -224,7 +222,7 @@ public class MiuiWeatherView extends View {
         for (int i = 0; i < weatherDatas.size(); i++) {
             int c = weatherDatas.get(i).first;
             String w = weatherDatas.get(i).second;
-            Log.d("ccy", "weatherMap i =" + i + ";count = " + c + ";weather = " + w);
+            //Log.d("ccy", "weatherMap i =" + i + ";count = " + c + ";weather = " + w);
         }
     }
 
@@ -248,7 +246,7 @@ public class MiuiWeatherView extends View {
 
         setMeasuredDimension(viewWidth, viewHeight);
         calculatePontGap();
-        Log.d("ccy", "viewHeight = " + viewHeight + ";viewWidth = " + viewWidth);
+       // Log.d("ccy", "viewHeight = " + viewHeight + ";viewWidth = " + viewWidth);
     }
 
     @Override
@@ -326,19 +324,19 @@ public class MiuiWeatherView extends View {
         }
         canvas.drawPath(linePath, linePaint); //画出折线
 
-        //接下来画折线拐点的园
+        //接下来画折线拐点的圆
         float x, y;
         for (int i = 0; i < points.size(); i++) {
             x = points.get(i).x;
             y = points.get(i).y;
 
-            //先画一个颜色为背景颜色的实心园覆盖掉折线拐角
+            //先画一个颜色为背景颜色的实心圆覆盖掉折线拐角
             circlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
             circlePaint.setColor(backgroundColor);
             canvas.drawCircle(x, y,
                               pointRadius + dp2pxF(getContext(), 1),
                               circlePaint);
-            //再画出正常的空心园
+            //再画出正常的空心圆
             circlePaint.setStyle(Paint.Style.STROKE);
             circlePaint.setColor(DEFAULT_BULE);
             canvas.drawCircle(x, y,
@@ -386,7 +384,7 @@ public class MiuiWeatherView extends View {
         linePaint.setAlpha(0xcc);
 
         //设置画笔画出虚线
-        float[] f = {dp2pxF(getContext(), 5), dp2pxF(getContext(), 1)};  //两个值分别为循环的实线长度、空白长度
+        float[] f = {dp2pxF(getContext(), 5), dp2pxF(getContext(), 2)};  //两个值分别为循环的实线长度、空白长度
         PathEffect pathEffect = new DashPathEffect(f, 0);
         linePaint.setPathEffect(pathEffect);
 

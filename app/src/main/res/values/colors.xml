@@ -145,5 +145,6 @@
     <color name="reg_choose_color">#999999</color>
     <color name="text_color_black">#333333</color>
     <color name="index_bg_color">#F1F1F6</color>
+    <color name="color_66">#666666</color>
 
 </resources>

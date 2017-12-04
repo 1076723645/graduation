@@ -1,5 +1,6 @@
 package com.example.finaldesig.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
@@ -8,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -67,6 +69,7 @@ public class GuideActivity extends AppCompatActivity {
         setting = getSharedPreferences("IS_FIRST", 0);
         Boolean user_first = setting.getBoolean("FIRST",true);
         if(user_first){//第一次
+            setting.edit().putBoolean("FIRST", false).apply();
             new FetchCodesTask().execute(fileName);
         }else{
             LogUtil.i(ACTIVITY_TAG,"不是第一次");
@@ -77,6 +80,7 @@ public class GuideActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class FetchCodesTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -99,11 +103,10 @@ public class GuideActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String json) {
-            boolean result = false;
+            boolean result;
             result = Utility.handleCityCodeResponce(json);
             if (result) {
                 LogUtil.i(ACTIVITY_TAG,"第一次打开");
-                setting.edit().putBoolean("FIRST", false).commit();
                 Intent intent = new Intent(GuideActivity.this, MainActivity.class);
                 intent.putExtra("city",addressCity);
                 startActivity(intent);
@@ -114,8 +117,8 @@ public class GuideActivity extends AppCompatActivity {
         }
     }
 
-    public void onRequestPermissionsResult(final int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         PermissionUtil.onRequestPermissionsResult(GuideActivity.this, requestCode, permissions, grantResults);
     }
 
