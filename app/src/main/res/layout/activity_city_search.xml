@@ -5,13 +5,44 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.finaldesig.ui.activity.CitySearchActivity">
+    tools:context="com.example.finaldesign.ui.activity.CitySearchActivity">
 
-    <TextView
-        android:id="@+id/tv_test"
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/blue_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="北京" />
+        android:layout_height="48dp"
+        android:background="?attr/colorPrimary">
 
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:cropToPadding="true"
+            android:padding="5dp"
+            android:src="@drawable/introduce_return"
+            tools:ignore="ContentDescription"/>
+
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+    </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"/>
 </LinearLayout>

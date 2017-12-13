@@ -1,26 +1,65 @@
-<android.support.v4.widget.SwipeRefreshLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.finaldesig.ui.fragment.WeatherFragment"
-    android:id="@+id/swipe_refresh"
+    tools:context="com.example.finaldesign.ui.fragment.WeatherFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.finaldesign.ui.fragment.WeatherFragment"
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:orientation="vertical"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:fitsSystemWindows="true">
+
+                <include layout="@layout/weather_title"/>
+                <include layout="@layout/forest"/>
+                <include layout="@layout/hour_forest"/>
+                <include layout="@layout/quality_forest"/>
+                <include layout="@layout/item_suggest"/>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <com.example.finaldesign.presenter.CompatToolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_header_cond"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:fitsSystemWindows="true">
-
-            <include layout="@layout/weather_title"/>
-            <include layout="@layout/forest"/>
-            <include layout="@layout/hour_forest"/>
-            <include layout="@layout/quality_forest"/>
-            <include layout="@layout/item_suggest"/>
-
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_gravity="center"
+            android:src="@drawable/icon_sunny"/>
+        <TextView
+            android:id="@+id/tv_header_title"
+            android:text="杭州"
+            android:layout_marginLeft="6dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/tv_header_tmp"
+            android:text="15°"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </com.example.finaldesign.presenter.CompatToolbar>
+</FrameLayout>

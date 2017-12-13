@@ -10,10 +10,10 @@
         android:id="@+id/weather_bg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_sunny_night"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/bg_sunny_night"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/weather_temp"

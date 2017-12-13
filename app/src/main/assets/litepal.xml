@@ -3,9 +3,9 @@
     <version value="1"/>
 
     <list>
-        <mapping class="com.example.finaldesig.db.Province"/>
-        <mapping class="com.example.finaldesig.db.City"/>
-        <mapping class="com.example.finaldesig.db.County"/>
-        <mapping class="com.example.finaldesig.db.CityCode"/>
+        <mapping class="com.example.finaldesign.db.Province"/>
+        <mapping class="com.example.finaldesign.db.City"/>
+        <mapping class="com.example.finaldesign.db.County"/>
+        <mapping class="com.example.finaldesign.db.CityCode"/>
     </list>
 </litepal>
