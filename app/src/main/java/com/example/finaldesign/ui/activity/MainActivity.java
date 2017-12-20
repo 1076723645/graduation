@@ -2,34 +2,38 @@ package com.example.finaldesign.ui.activity;
 
 
 import android.app.ActivityOptions;
+
 import android.content.Intent;
+
 import android.content.SharedPreferences;
 
 import android.graphics.drawable.BitmapDrawable;
 
 
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
+
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
-import android.util.Log;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
+
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.finaldesign.BuildConfig;
 import com.example.finaldesign.R;
 
 import com.example.finaldesign.gson.Weather;
@@ -49,9 +53,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -62,7 +67,8 @@ public class MainActivity extends AppCompatActivity{
     private static final String ACTIVITY_TAG="MainActivity";
     private static final String CONTENTLIST = "contentList";
     private PopupWindow popupWindow;
-    private View mPopuView;
+    private View bgView;
+    private TextView mPopuView;
     private String addressCity;//定位城市
     private ViewPager viewPager;
     private FragAdapter adapter;
@@ -74,6 +80,11 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         SystemFit.fitSys(this);
+        Transition fade = TransitionInflater.from(this).inflateTransition(R.transition.fade);
+        getWindow().setExitTransition(fade);
+        getWindow().setEnterTransition(fade);
+        getWindow().setReenterTransition(fade);
+        getWindow().setReturnTransition(fade);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);//注册EventBus
         initDate();
@@ -135,8 +146,10 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initView(){
-        mPopuView = findViewById(R.id.view_line);
-        ImageButton addCity = (ImageButton)findViewById(R.id.add_menu);
+        bgView = findViewById(R.id.v_bg);
+        mPopuView = (TextView) findViewById(R.id.text_menu);
+        mPopuView.bringToFront();
+        ImageView addCity = (ImageView)findViewById(R.id.add_menu);
         viewPager = (ViewPager) findViewById(R.id.city_viewpager);
         for(int i=0;i<contentList.size();i++){
             WeatherFragment weatherFragment = WeatherFragment.newInstance(contentList, i);
@@ -145,7 +158,7 @@ public class MainActivity extends AppCompatActivity{
         adapter = new FragAdapter(getSupportFragmentManager(),this);
         adapter.setData((ArrayList<WeatherFragment>) fragmentList);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(contentList.size());
+        viewPager.setOffscreenPageLimit(3);
         addCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +167,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivityForResult(intent, 1, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
-        ImageButton setting = (ImageButton)findViewById(R.id.setting);
+        ImageView setting = (ImageView)findViewById(R.id.setting);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,7 +185,10 @@ public class MainActivity extends AppCompatActivity{
         switch (requestCode){
             case 1:
                 if (resultCode == RESULT_OK){
-                    viewPager.setCurrentItem(data.getIntExtra("data_return",0));
+                    final int page = data.getIntExtra("data_return",0);
+                    viewPager.setCurrentItem(page);
+                    WeatherFragment weatherFragment = fragmentList.get(page);
+                    weatherFragment.fullScroll();
                 }
                 break;
             default:
@@ -191,7 +207,7 @@ public class MainActivity extends AppCompatActivity{
         adapter.notifyDataSetChanged();
     }
 
-    public void requestWeather(final String weatherId) {
+    private void requestWeather(final String weatherId) {
         String weatherUrl = "http://guolin.tech/api/weather?cityid="
                 + weatherId + "&key=9437b90c51624dd08de1707b34416f91";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
@@ -220,7 +236,7 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public void showPopupWindow() {//显示she窗口
+    private void showPopupWindow() {//显示窗口
 
         View contentView = LayoutInflater.from(this).inflate(R.layout.popuw_setting, null);
         if (popupWindow == null) {
@@ -231,7 +247,8 @@ public class MainActivity extends AppCompatActivity{
         popupWindow.setFocusable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setAnimationStyle(R.style.showPopupAnimation);
-        popupWindow.showAsDropDown(mPopuView,0,- Utility.dip2px(this,135));
+        popupWindow.showAsDropDown(mPopuView,0,- Utility.dip2px(this,175));
+        bgView.setVisibility(View.VISIBLE);
         TextView setting = (TextView) contentView.findViewById(R.id.tv_setting);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,6 +257,13 @@ public class MainActivity extends AppCompatActivity{
                 intent.putStringArrayListExtra("cityList", (ArrayList<String>) contentList);
                 startActivity(intent);
                 popupWindow.dismiss();
+                bgView.setVisibility(View.GONE);
+            }
+        });
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                bgView.setVisibility(View.GONE);
             }
         });
     }

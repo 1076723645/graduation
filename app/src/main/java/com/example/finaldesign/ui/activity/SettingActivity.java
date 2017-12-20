@@ -3,9 +3,11 @@ package com.example.finaldesign.ui.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,11 +21,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finaldesign.R;
+import com.example.finaldesign.presenter.DataCleanManager;
 import com.example.finaldesign.ui.adapter.CityWarnAdapter;
 import com.suke.widget.SwitchButton;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,11 +43,16 @@ public class SettingActivity extends AppCompatActivity {
     private ImageView backButton;
     private CityWarnAdapter adapter;
     private RecyclerView recyclerView;
-    private SwitchButton switchButton;
+    private TextView cacheSize;
+    private SwitchButton noDisturb;
+    private SwitchButton changeRemind;
+    private SwitchButton autoUpdate;
+    private SwitchButton sbNight;
     private List<String> cityList = new ArrayList<>();
 
-    public SettingActivity() {
-    }
+    private SharedPreferences prefs = null;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +60,17 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         cityList = getIntent().getStringArrayListExtra("cityList");
         initView();
+        initListener();
     }
 
     private void initView(){
+
+        cacheSize = (TextView) findViewById(R.id.tv_cache);
         mTextViewList.add((TextView) findViewById(R.id.t));
         mTextViewList.add((TextView) findViewById(R.id.tt));
         mTextViewList.add((TextView) findViewById(R.id.textView5));
         mTextViewList.add((TextView) findViewById(R.id.tv_night));
+        mTextViewList.add((TextView) findViewById(R.id.tv_0));
         mTextViewList.add((TextView) findViewById(R.id.tv_1));
         mTextViewList.add((TextView) findViewById(R.id.tv_2));
         mTextViewList.add((TextView) findViewById(R.id.tv_3));
@@ -76,7 +90,12 @@ public class SettingActivity extends AppCompatActivity {
         mViewList.add(findViewById(R.id.v12));
         mViewList.add(findViewById(R.id.v13));
         mViewList.add(findViewById(R.id.v14));
+        mViewList.add(findViewById(R.id.v15));
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        TextView title = (TextView) findViewById(R.id.tv_title);
+        title.setText("设置");
         backButton = (ImageView) findViewById(R.id.iv_back);
         recyclerView= (RecyclerView) findViewById(R.id.recycle_view);
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -84,12 +103,75 @@ public class SettingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(false);
-        switchButton = (SwitchButton) findViewById(R.id.sb_night);
-        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+        sbNight = (SwitchButton) findViewById(R.id.sb_night);
+
+        autoUpdate = (SwitchButton) findViewById(R.id.sb_update_weather);
+        autoUpdate.setChecked(prefs.getString("autoUpdate","0").equals("1"));
+
+        changeRemind = (SwitchButton) findViewById(R.id.sb_change_remind);
+        changeRemind.setChecked(prefs.getString("changeRemind","0").equals("1"));
+
+        noDisturb = (SwitchButton) findViewById(R.id.sb_no_disturb);
+        noDisturb.setChecked(prefs.getString("noDisturb","0").equals("1"));
+
+        try {
+            cacheSize.setText(DataCleanManager.getTotalCacheSize(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initListener(){
+
+        editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+
+        sbNight.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                //TODO do your job
                 changeTheme();
+            }
+        });
+        autoUpdate.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (prefs.getString("autoUpdate","0").equals("0")) {
+                    editor.putString("autoUpdate","1");
+                    editor.apply();
+                } else {
+                    editor.putString("autoUpdate","0");
+                    editor.apply();
+                }
+            }
+        });
+        changeRemind.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (prefs.getString("changeRemind","0").equals("0")) {
+                    editor.putString("changeRemind","1");
+                    editor.apply();
+                } else {
+                    editor.putString("changeRemind","0");
+                    editor.apply();
+                }
+            }
+        });
+        noDisturb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (prefs.getString("noDisturb","0").equals("0")) {
+                    editor.putString("noDisturb","1");
+                    editor.apply();
+                } else {
+                    editor.putString("noDisturb","0");
+                    editor.apply();
+                }
+            }
+        });
+        cacheSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataCleanManager.cleanApplicationData(SettingActivity.this);
+                Toast.makeText(SettingActivity.this, "缓存已经清理", Toast.LENGTH_SHORT).show();
             }
         });
     }

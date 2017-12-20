@@ -37,7 +37,6 @@ public class CityManagerActivity extends AppCompatActivity {
     private List<String> contentList = new ArrayList<>();
     private static final String ACTIVITY_TAG="CityManagerActivity";
     private static final String CONTENTLIST = "contentList";
-    private RecyclerView recyclerView;
     private CityManagerAdapter adapter;
 
     @Override
@@ -50,6 +49,7 @@ public class CityManagerActivity extends AppCompatActivity {
             getWindow().setExitTransition(fade);
             getWindow().setEnterTransition(explode);
             getWindow().setReenterTransition(explode);
+            getWindow().setReturnTransition(fade);
         }
         setContentView(R.layout.activity_city_managre);
         contentList =  getIntent().getStringArrayListExtra("list");
@@ -65,10 +65,11 @@ public class CityManagerActivity extends AppCompatActivity {
         if (actionbar != null){
             actionbar.setDisplayHomeAsUpEnabled(true);
         }
-        recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         adapter = new CityManagerAdapter(contentList,this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(adapter);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

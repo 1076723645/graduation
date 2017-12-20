@@ -44,7 +44,8 @@ public class CityDeleteActivity extends AppCompatActivity {
         Transition fade = TransitionInflater.from(this).inflateTransition(R.transition.fade);
         getWindow().setExitTransition(fade);
         getWindow().setEnterTransition(fade);
-        getWindow().setReenterTransition(explode);
+        getWindow().setReenterTransition(fade);
+        getWindow().setReturnTransition(fade);
         setContentView(R.layout.activity_city_delete);
         contentList =  getIntent().getStringArrayListExtra("list");
         initDate();

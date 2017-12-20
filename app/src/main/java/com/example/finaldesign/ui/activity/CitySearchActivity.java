@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finaldesign.R;
 import com.example.finaldesign.db.City;
@@ -21,6 +22,7 @@ import com.example.finaldesign.db.County;
 import com.example.finaldesign.db.Province;
 import com.example.finaldesign.util.HttpUtil;
 import com.example.finaldesign.util.LogUtil;
+import com.example.finaldesign.util.NetUtils;
 import com.example.finaldesign.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -48,6 +50,7 @@ public class CitySearchActivity extends AppCompatActivity {
     private Province selectedProvince;//选中的省
     private City selectedCity;
     private ProgressDialog progressDialog;
+    private TextView noNework;
     private TextView test;
     private ArrayAdapter<String> adapter;
     private ImageView backButton;
@@ -61,6 +64,8 @@ public class CitySearchActivity extends AppCompatActivity {
         Transition fade = TransitionInflater.from(this).inflateTransition(R.transition.fade);
         getWindow().setExitTransition(fade);
         getWindow().setEnterTransition(fade);
+        getWindow().setReenterTransition(fade);
+        getWindow().setReturnTransition(fade);
         setContentView(R.layout.activity_city_search);
         initView();
         initListener();
@@ -68,9 +73,19 @@ public class CitySearchActivity extends AppCompatActivity {
     private void initView(){
         backButton = (ImageView) findViewById(R.id.iv_back);
         test = (TextView) findViewById(R.id.tv_name);
+        noNework = (TextView) findViewById(R.id.tv_no_network);
         listView = (ListView) findViewById(R.id.list);
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,dataList);
         listView.setAdapter(adapter);
+        if (!NetUtils.isConnected(this)){
+            noNework.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+            test.setText("添加城市");
+        }
+        else {
+
+            queryProvinces();
+        }
     }
 
     private void initListener(){
@@ -92,6 +107,18 @@ public class CitySearchActivity extends AppCompatActivity {
                 }
             }
         });
+        noNework.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (NetUtils.isConnected(CitySearchActivity.this)){
+                    noNework.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
+                    queryProvinces();
+                }else {
+                    Toast.makeText(CitySearchActivity.this, "没有网络，请稍后再试", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +129,6 @@ public class CitySearchActivity extends AppCompatActivity {
                 }
             }
         });
-        queryProvinces();
     }
 
     private void queryProvinces(){

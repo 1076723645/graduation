@@ -35,7 +35,7 @@ import java.io.InputStreamReader;
 public class GuideActivity extends AppCompatActivity {
 
 
-    private final static String fileName = "code.json";
+    private static final String fileName = "code.json";
     private static final String ACTIVITY_TAG="GuideActivity";
     private LocationClient mlocationClient;
     private String addressCity;//定位城市
@@ -45,8 +45,11 @@ public class GuideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                |View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            decorView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN| View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }else {
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        }
         getWindow().setStatusBarColor(Color.TRANSPARENT);
        // setContentView(R.layout.activity_guide);
         PermissionUtil.handPermission(this);
