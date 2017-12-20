@@ -62,7 +62,7 @@ public class PermissionUtil {
         String[] mPermissionGroup = new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         // 过滤已持有的权限
         List<String> mRequestList = new ArrayList<>();

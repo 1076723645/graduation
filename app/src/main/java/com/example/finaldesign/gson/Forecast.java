@@ -17,6 +17,9 @@ public class Forecast {
     @SerializedName("cond")
     public More more;
 
+    @SerializedName("astro")
+    public Sun sun;
+
     public class Temperature{
         public String max;
         public String min;
@@ -24,5 +27,12 @@ public class Forecast {
     public class More{
         @SerializedName("txt_d")
         public String info;
+    }
+
+    public class Sun{
+        @SerializedName("sr")
+        public String sunRise;
+        @SerializedName("ss")
+        public String sunSet;
     }
 }

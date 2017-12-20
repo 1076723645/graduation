@@ -1,6 +1,7 @@
 package com.example.finaldesign.util;
 
 import android.content.Context;
+import android.text.format.Time;
 
 import com.example.finaldesign.R;
 import com.example.finaldesign.db.CityCode;
@@ -78,8 +79,11 @@ public class DataUtil {
             return R.drawable.bg_sunny;
         } else if (s.contains("雨")) {
             return R.drawable.bg_ice_rain;
-        } else if (s.contains("多云"))
+        } else if (s.contains("多云")) {
             return R.drawable.bg_cloudy;
+        }else if (s.contains("雾")){
+            return R.drawable.bg_foggy;
+        }else
         return R.drawable.bg_sunny_night;
     }
 
@@ -156,27 +160,27 @@ public class DataUtil {
         return data;
     }
 
-    public static String getAddressCityCode(String address){
+    public static String getAddressCityCode(String address) {
         List<CityCode> cityCodes = DataSupport.where("cityName=?", address).find(CityCode.class);
         return cityCodes.get(0).getCityCode();
     }
 
-    public static List<String> stringToList(String strs){
+    public static List<String> stringToList(String strs) {
         String str[] = strs.split(",");
         return Arrays.asList(str);
     }
 
-    public static String listToString(List<String> list){
-        if(list==null){
+    public static String listToString(List<String> list) {
+        if (list == null) {
             return null;
         }
         StringBuilder result = new StringBuilder();
         boolean first = true;
         //第一个前面不拼接","
-        for(String string :list) {
-            if(first) {
-                first=false;
-            }else{
+        for (String string : list) {
+            if (first) {
+                first = false;
+            } else {
                 result.append(",");
             }
             result.append(string);
@@ -184,7 +188,50 @@ public class DataUtil {
         return result.toString();
     }
 
-    public static void speak(Context context, String data){
+    public static void speak(Context context, String data) {
+    }
 
+    /**
+     * 判断当前系统时间是否在指定时间的范围内
+     *
+     * @param beginHour 开始小时，例如22
+     * @param beginMin  开始小时的分钟数，例如30
+     * @param endHour   结束小时，例如 8
+     * @param endMin    结束小时的分钟数，例如0
+     * @return true表示在范围内，否则false
+     */
+
+    public static boolean isCurrentInTimeScope(int beginHour, int beginMin, int endHour, int endMin) {
+        boolean result;
+        final long aDayInMillis = 1000 * 60 * 60 * 24;
+        final long currentTimeMillis = System.currentTimeMillis();
+
+        Time now = new Time();
+        now.set(currentTimeMillis);
+
+        Time startTime = new Time();
+        startTime.set(currentTimeMillis);
+        startTime.hour = beginHour;
+        startTime.minute = beginMin;
+
+        Time endTime = new Time();
+        endTime.set(currentTimeMillis);
+        endTime.hour = endHour;
+        endTime.minute = endMin;
+
+        if (!startTime.before(endTime)) {
+            // 跨天的特殊情况（比如22:00-8:00）
+            startTime.set(startTime.toMillis(true) - aDayInMillis);
+            result = !now.before(startTime) && !now.after(endTime); // startTime <= now <= endTime
+            Time startTimeInThisDay = new Time();
+            startTimeInThisDay.set(startTime.toMillis(true) + aDayInMillis);
+            if (!now.before(startTimeInThisDay)) {
+                result = true;
+            }
+        } else {
+            // 普通情况(比如 8:00 - 14:00)
+            result = !now.before(startTime) && !now.after(endTime); // startTime <= now <= endTime
+        }
+        return result;
     }
 }

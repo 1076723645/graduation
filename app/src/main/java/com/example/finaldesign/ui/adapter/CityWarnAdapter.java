@@ -28,26 +28,45 @@ public class CityWarnAdapter extends RecyclerView.Adapter<CityWarnAdapter.ViewHo
     private List<Weather> mWeatherList = new ArrayList<>();
     private Activity activity;
     private Context mContext;
+    private SharedPreferences prefs = null;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mContext == null){
             mContext = parent.getContext();
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
         for (int i=0; i<cityList.size(); i++) {
             String response = prefs.getString(cityList.get(i),null);
             Weather weather = Utility.handleWeatherResponse(response);
             mWeatherList.add(weather);
         }
         View v = LayoutInflater.from(mContext).inflate(R.layout.item_warnning, parent, false);
-        return new ViewHolder(v);
+        final ViewHolder holder =  new ViewHolder(v);
+        holder.switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                int position = holder.getAdapterPosition();
+                if (prefs.getString(cityList.get(position)+"warn","0").equals("0")) {
+                    editor.putString(cityList.get(position)+"warn","1");
+                    editor.apply();
+                } else {
+                    editor.putString(cityList.get(position)+"warn","0");
+                    editor.apply();
+                }
+            }
+        });
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(CityWarnAdapter.ViewHolder holder, int position) {
         Weather weather = mWeatherList.get(position);
         holder.address.setText(weather.basic.cityName);
+        if (prefs.getString(cityList.get(position)+"warn","0").equals("1")) {
+            holder.switchButton.setChecked(true);
+        }
     }
 
     public CityWarnAdapter(List<String> List, Activity activity){
@@ -65,7 +84,7 @@ public class CityWarnAdapter extends RecyclerView.Adapter<CityWarnAdapter.ViewHo
         TextView address;
         SwitchButton switchButton;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             address = (TextView) view.findViewById(R.id.tv_name);
             switchButton = (SwitchButton) view.findViewById(R.id.sb_warning);

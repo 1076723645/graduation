@@ -15,8 +15,8 @@
 
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_gravity="center"
-        android:text="设置"
         android:textSize="17sp"
         android:textColor="?attr/Background"
         android:layout_width="wrap_content"

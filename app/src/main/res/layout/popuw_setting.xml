@@ -10,10 +10,11 @@
             android:id="@+id/tv_voice"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:background="@drawable/ripple_bg"
             android:gravity="center_vertical"
             android:text="语音播报"
             android:textSize="14sp"
-            android:layout_marginLeft="24dp" />
+            android:paddingLeft="24dp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -26,7 +27,8 @@
             android:layout_height="45dp"
             android:gravity="center_vertical"
             android:textSize="14sp"
-            android:layout_marginLeft="24dp"
+            android:background="@drawable/ripple_bg"
+            android:paddingLeft="24dp"
             android:text="分享天气" />
         <View
             android:layout_width="match_parent"
@@ -37,9 +39,14 @@
         <TextView
             android:id="@+id/tv_setting"
             android:layout_width="match_parent"
+            android:background="@drawable/ripple_bg"
             android:layout_height="45dp"
             android:gravity="center_vertical"
             android:textSize="14sp"
-            android:layout_marginLeft="24dp"
+            android:paddingLeft="24dp"
             android:text="设置" />
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color" />
+</LinearLayout>

@@ -3,7 +3,7 @@ package com.example.finaldesign.db;
 import org.litepal.crud.DataSupport;
 
 /**
- * Created by Administrator on 2017/10/30.
+ * Created by hui on 2017/10/30.
  */
 
 public class CityCode extends DataSupport {

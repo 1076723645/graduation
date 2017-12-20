@@ -8,12 +8,17 @@ import com.example.finaldesign.db.City;
 import com.example.finaldesign.db.CityCode;
 import com.example.finaldesign.db.County;
 import com.example.finaldesign.db.Province;
+import com.example.finaldesign.db.SearchCity;
+import com.example.finaldesign.gson.Area;
 import com.example.finaldesign.gson.Weather;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/10/26.
@@ -112,8 +117,32 @@ public class Utility {
         return null;
     }
 
-    public static int dip2px(Context context, float dpValue) {
+    public static boolean handleArea(String response){
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            String content = jsonArray.getJSONObject(0).toString();
+            List<Area> provinceList = new Gson().fromJson(content,new TypeToken<List<Area>>(){}.getType());
+            for (int i=0; i<provinceList.size(); i++){
+                SearchCity city = new SearchCity();
+                Area area = provinceList.get(i);
+                city.setProvince(area.provinceName);
+                for (int j=0; j<area.cityList.size(); j++){
+                    Area.City shi = area.cityList.get(j);
+                    city.setShi(shi.cityName);
+                    for (int k=0; k<shi.countyList.size(); k++){
+                        city.setXian(shi.countyList.get(k));
+                    }
+                }
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static int dip2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+        return (int) (dp * scale + 0.5f);
     }
 }

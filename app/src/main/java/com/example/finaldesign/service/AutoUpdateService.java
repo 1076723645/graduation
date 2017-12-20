@@ -21,6 +21,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class AutoUpdateService extends Service {
+
     public AutoUpdateService() {
     }
 
@@ -48,7 +49,7 @@ public class AutoUpdateService extends Service {
         String weatherString = prefs.getString("weather",null);
         if (weatherString!=null){
             Weather weather = Utility.handleWeatherResponse(weatherString);
-            String weatherId = weather.basic.weatherId;
+            String weatherId = weather != null ? weather.basic.weatherId : null;
             String weatherUrl = "http://guolin.tech/api/weather?cityid="
                     +weatherId+"&key=9437b90c51624dd08de1707b34416f91";
             HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {

@@ -2,6 +2,8 @@ package com.example.finaldesign.ui.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +31,14 @@ import com.example.finaldesign.presenter.CircleBar;
 import com.example.finaldesign.presenter.CompatToolbar;
 import com.example.finaldesign.presenter.MiuiWeatherView;
 import com.example.finaldesign.presenter.WeatherBean;
+import com.example.finaldesign.ui.activity.AirDetailActivity;
 import com.example.finaldesign.util.DataUtil;
 import com.example.finaldesign.util.HttpUtil;
 import com.example.finaldesign.util.LogUtil;
 import com.example.finaldesign.util.NetUtils;
 import com.example.finaldesign.util.Utility;
 
-import java.io.IOException;;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +52,9 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
     private int flag;
     private static final String ActLog = "ActivityLog";
     public SwipeRefreshLayout swipeRefresh;
+    protected boolean isVisible;
 
-    private TextView tmp;
+    private TextView tmp,qul,qulCount;
     private TextView titleCity;
     private TextView cityWeather;
     private TextView cityWind;
@@ -58,6 +63,7 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
     private TextView flLv;
     private ImageView bg;
 
+    private NestedScrollView scrollView;
     private LinearLayout forecastLayout;
     private MiuiWeatherView weatherView;
     private CompatToolbar toolbar;
@@ -98,10 +104,7 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        Transition slide = TransitionInflater.from(getContext()).inflateTransition(R.transition.slide);
-        Transition fade = TransitionInflater.from(getContext()).inflateTransition(R.transition.fade);
-        getActivity().getWindow().setEnterTransition(slide);
-        getActivity().getWindow().setExitTransition(fade);//activity的过渡动画
+
         View view = inflater.inflate(R.layout.fragment_weather, container,false);
         forecastLayout = (LinearLayout)view.findViewById(R.id.forest_layout);
         weatherView = (MiuiWeatherView)view.findViewById(R.id.weather);
@@ -113,7 +116,7 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
     public void initView(View v){
         toolbar = (CompatToolbar) v.findViewById(R.id.toolbar);
         toolbar.setAlpha(0);
-        NestedScrollView scrollView = (NestedScrollView) v.findViewById(R.id.scrollView);
+         scrollView = (NestedScrollView) v.findViewById(R.id.scrollView);
         scrollView.setOnScrollChangeListener(this);
         swipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.swipe_refresh);
         titleCity = (TextView)v.findViewById(R.id.weather_city_name);
@@ -124,11 +127,15 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
         flLv = (TextView)v.findViewById(R.id.fl_lv);
         tmp = (TextView)v.findViewById(R.id.weather_temp);
         bg = (ImageView)v.findViewById(R.id.weather_bg);
+        qul = (TextView)v.findViewById(R.id.tv_qul);
+        qulCount = (TextView)v.findViewById(R.id.tv_qul_count);
+
         aqiBar = (CircleBar)v.findViewById(R.id.AQI_bar);
         pmBar = (CircleBar)v.findViewById(R.id.PM25_bar);
         qulMore = (TextView)v.findViewById(R.id.qul_more);
         airQul = (TextView)v.findViewById(R.id.tv_air_qul);
         updateTime = (TextView) v.findViewById(R.id.tv_time);
+
         comfortText = (TextView)v.findViewById(R.id.tv_comfortable);
         comfortInfo = (TextView)v.findViewById(R.id.tv_comfortable_info);
         carWashText = (TextView)v.findViewById(R.id.tv_wash);
@@ -137,6 +144,7 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
         sportInfo = (TextView)v.findViewById(R.id.tv_sport_info);
         uvText = (TextView)v.findViewById(R.id.tv_uv);
         uvInfo = (TextView)v.findViewById(R.id.tv_uv_info);
+
         toolCity = (TextView)v.findViewById(R.id.tv_header_title);
         toolTemp = (TextView)v.findViewById(R.id.tv_header_tmp);
         ivCond = (ImageView) v.findViewById(R.id.iv_header_cond);
@@ -189,17 +197,6 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
             @Override
             public void onFailure(Call call, IOException e) {
                 Toast.makeText(getContext(), "网络连接异常，请稍后重试", Toast.LENGTH_SHORT).show();
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                final String responseText = prefs.getString(weatherId, null);
-                if (responseText!=null){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Weather weather = Utility.handleWeatherResponse(responseText);
-                            showWeatherInfo(weather);
-                        }
-                    });
-                }
                 swipeRefresh.setRefreshing(false);
             }
 
@@ -233,12 +230,21 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
         String weatherInfo = weather.now.more.info;
         String wind = weather.now.windMore.where;
         String windlv = weather.now.windMore.how;
+        String pm25 = weather.aqi.city.pm25;
+        String quality = weather.aqi.city.qlty;
+        String aqi = weather.aqi.city.aqi;
+       // String sunRise = null,sunSet = null;
         if (windlv.equals("微风")){
             windlv = "1";
         }
         String humlv = weather.now.humidity;
         String fllv = weather.now.bodytemp;
         bg.setImageResource(DataUtil.getWeatherBg(weatherInfo));
+        if (Integer.parseInt(pm25)>150){
+            bg.setImageResource(R.drawable.bg_pmdirt);
+        }
+        qul.setText("空气"+quality);
+        qulCount.setText(aqi);
         titleCity.setText(cityName);
         tmp.setText(degree);
         cityWind.setText(wind);
@@ -263,6 +269,8 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
             ImageView png = (ImageView)v.findViewById(R.id.forest_pic);
             if (i==0){
                 dataText.setText("今天");
+            /*  sunRise = forecast.sun.sunRise;
+                sunSet = forecast.sun.sunSet;*/
             }else if (i==1){
                 dataText.setText("明天");
             }else {
@@ -275,20 +283,28 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
             forecastLayout.addView(v);
         }//未来3天天气预报
 
+
         List<WeatherBean> data = DataUtil.getHourData(weather);
         weatherView.setData(data);//24小时天气预报
 
-        String quality = weather.aqi.city.qlty;
         airQul.setText(quality);
         String time = weather.basic.update.updateTime;
         updateTime.setText(time.substring(time.length()-5, time.length())+" 发布");
         aqiBar.setText("AQI");
-        LogUtil.i("aqi", weather.aqi.city.aqi);
-        LogUtil.i("pm25", weather.aqi.city.pm25);
-        aqiBar.setDesText(weather.aqi.city.aqi);
+        LogUtil.i("aqi", aqi);
+        LogUtil.i("pm25", pm25);
+        aqiBar.setDesText(aqi);
         pmBar.setText("PM25");
-        pmBar.setDesText(weather.aqi.city.pm25);
-        pmBar.setShowText("首要污染物");//空气质量
+        pmBar.setDesText(pm25);
+        pmBar.setShowText("首要污染物");
+        qulMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AirDetailActivity.class);
+                intent.putExtra("id",weatherId);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+            }
+        });//空气质量
 
         comfortText.setText(weather.suggestion.comfot.msg);
         comfortInfo.setText(weather.suggestion.comfot.info);
@@ -298,6 +314,15 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
         sportInfo.setText(weather.suggestion.sport.info);
         uvText.setText(weather.suggestion.ultraviolet.msg);
         uvInfo.setText(weather.suggestion.ultraviolet.info);//生活建议
+    }
+
+    public void fullScroll(){//滑动到顶部
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
     }
 
     @Override
