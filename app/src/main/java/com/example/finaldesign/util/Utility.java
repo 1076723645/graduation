@@ -8,8 +8,6 @@ import com.example.finaldesign.db.City;
 import com.example.finaldesign.db.CityCode;
 import com.example.finaldesign.db.County;
 import com.example.finaldesign.db.Province;
-import com.example.finaldesign.db.SearchCity;
-import com.example.finaldesign.gson.Area;
 import com.example.finaldesign.gson.Weather;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -117,7 +115,21 @@ public class Utility {
         return null;
     }
 
-    public static boolean handleArea(String response){
+    //解析定位城市信息
+    public static String handleLocationResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray results = jsonObject.getJSONArray("results");
+            JSONObject jsonObject1 = results.getJSONObject(0);
+            JSONArray address_components = jsonObject1.getJSONArray("address_components");
+            JSONObject jsonObject2 = address_components.getJSONObject(4);
+            return jsonObject2.getString("long_name");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /*public static boolean handleArea(String response){
         try {
             JSONArray jsonArray = new JSONArray(response);
             String content = jsonArray.getJSONObject(0).toString();
@@ -139,7 +151,7 @@ public class Utility {
             e.printStackTrace();
         }
         return false;
-    }
+    }*/
 
     public static int dip2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;

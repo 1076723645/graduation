@@ -94,7 +94,13 @@ public class CityManagerActivity extends AppCompatActivity {
                 startActivityForResult(intent,2,ActivityOptions.makeSceneTransitionAnimation(CityManagerActivity.this).toBundle());
                 break;
             case android.R.id.home:
-                finish();
+                if (contentList.size() == 0){
+                    Intent intent1 = new Intent(CityManagerActivity.this,CitySearchActivity.class);
+                    startActivity(intent1);
+                    finish();
+                }else {
+                    finish();
+                }
                 break;
             default:
         }

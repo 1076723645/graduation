@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity{
     private PopupWindow popupWindow;
     private View bgView;
     private TextView mPopuView;
-    private String addressCity;//定位城市
     private ViewPager viewPager;
     private FragAdapter adapter;
     private List<String> contentList = new ArrayList<>();//内容表
@@ -80,11 +79,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         SystemFit.fitSys(this);
-        Transition fade = TransitionInflater.from(this).inflateTransition(R.transition.fade);
-        getWindow().setExitTransition(fade);
-        getWindow().setEnterTransition(fade);
-        getWindow().setReenterTransition(fade);
-        getWindow().setReturnTransition(fade);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);//注册EventBus
         initDate();
@@ -124,16 +118,15 @@ public class MainActivity extends AppCompatActivity{
     private void initDate(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String content = prefs.getString(CONTENTLIST,null);
-        if (content != null) {
-            LogUtil.d(ACTIVITY_TAG,content);
+        if (content != null && !content.equals("")) {
             contentList = new ArrayList<>(DataUtil.stringToList(content));
             LogUtil.d(ACTIVITY_TAG,contentList.toString());
             initView();
         } else {
             Intent intent = getIntent();
-            addressCity = intent.getStringExtra("city");
-            LogUtil.i(ACTIVITY_TAG, addressCity);
-            if (!addressCity.equals("null")){
+            String addressCity = intent.getStringExtra("city");
+            if (addressCity != null){
+                LogUtil.i(ACTIVITY_TAG, addressCity);
                 contentList.add(DataUtil.getAddressCityCode(addressCity));
                 LogUtil.d(ACTIVITY_TAG,contentList.toString());
                 requestWeather(contentList.get(0));
@@ -225,6 +218,7 @@ public class MainActivity extends AppCompatActivity{
                         if (weather != null && "ok".equals(weather.status)) {
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
                             editor.putString(weatherId,responseText);
+                            editor.putString(CONTENTLIST, DataUtil.listToString(contentList));
                             editor.apply();
                             initView();
                         } else {

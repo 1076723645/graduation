@@ -24,11 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finaldesign.R;
-import com.example.finaldesign.presenter.DataCleanManager;
 import com.example.finaldesign.ui.adapter.CityWarnAdapter;
 import com.suke.widget.SwitchButton;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -114,11 +112,11 @@ public class SettingActivity extends AppCompatActivity {
         noDisturb = (SwitchButton) findViewById(R.id.sb_no_disturb);
         noDisturb.setChecked(prefs.getString("noDisturb","0").equals("1"));
 
-        try {
+       /* try {
             cacheSize.setText(DataCleanManager.getTotalCacheSize(this));
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void initListener(){
@@ -167,13 +165,13 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
-        cacheSize.setOnClickListener(new View.OnClickListener() {
+      /*  cacheSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DataCleanManager.cleanApplicationData(SettingActivity.this);
                 Toast.makeText(SettingActivity.this, "缓存已经清理", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     private void changeTheme() {

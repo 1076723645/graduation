@@ -14,7 +14,7 @@ import com.example.finaldesign.R;
 
 public class CityChooseActivity extends AppCompatActivity {
 
-    private SearchView searchView;
+   /* private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,5 +67,5 @@ public class CityChooseActivity extends AppCompatActivity {
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint("输入城市名查找");//设置默认无内容时的文字提示
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 }

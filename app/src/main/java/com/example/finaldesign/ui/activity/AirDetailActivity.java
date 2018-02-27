@@ -35,7 +35,7 @@ public class AirDetailActivity extends AppCompatActivity {
     }
 
     public void initView(){
-        TextView pm25 = (TextView) findViewById(R.id.tv_pm25);
+       /* TextView pm25 = (TextView) findViewById(R.id.tv_pm25);
         TextView pm10 = (TextView) findViewById(R.id.tv_pm10);
         TextView so2 = (TextView) findViewById(R.id.tv_SO2);
         TextView co = (TextView) findViewById(R.id.tv_CO);
@@ -55,6 +55,6 @@ public class AirDetailActivity extends AppCompatActivity {
         co.setText(weather.aqi.city.co);
         qul.setText(weather.aqi.city.qlty);
         update.setText("刚刚更新");
-        info.setText(weather.suggestion.carWash.info);
+        info.setText(weather.suggestion.carWash.info);*/
     }
 }

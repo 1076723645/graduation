@@ -19,10 +19,10 @@ public class PermissionUtil {
 
     public static boolean requestPermission(final Activity activity) {
         List<String> permissionList = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(activity, Manifest.
+        /*if (ContextCompat.checkSelfPermission(activity, Manifest.
                 permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.READ_PHONE_STATE);
-        }
+        }*/
         if (ContextCompat.checkSelfPermission(activity, Manifest.
                 permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -57,11 +57,10 @@ public class PermissionUtil {
         }
     }
 
-    public static void handPermission(final Activity activity) {
+    public static boolean handPermission(final Activity activity) {
         // 定位权限组
         String[] mPermissionGroup = new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         // 过滤已持有的权限
@@ -80,6 +79,8 @@ public class PermissionUtil {
         } else {
             // 权限都有了，就可以继续后面的操作
             LogUtil.i("LOG","权限已经申请成功");
+            return true;
         }
+        return false;
     }
 }
