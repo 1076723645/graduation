@@ -14,20 +14,16 @@ import android.preference.PreferenceManager;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import android.view.ViewGroup;
 import android.view.Window;
 
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -37,14 +33,13 @@ import android.widget.Toast;
 import com.example.finaldesign.R;
 
 import com.example.finaldesign.gson.Weather;
-import com.example.finaldesign.presenter.Bean.DeleteCityEvent;
-import com.example.finaldesign.presenter.SystemFit;
+import com.example.finaldesign.model.helper.DeleteCityEvent;
+import com.example.finaldesign.util.SystemFit;
 import com.example.finaldesign.ui.adapter.FragAdapter;
 import com.example.finaldesign.ui.fragment.WeatherFragment;
 import com.example.finaldesign.util.DataUtil;
 import com.example.finaldesign.util.HttpUtil;
 import com.example.finaldesign.util.LogUtil;
-import com.example.finaldesign.util.PermissionUtil;
 import com.example.finaldesign.util.Utility;
 
 
@@ -169,10 +164,6 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        PermissionUtil.onRequestPermissionsResult(MainActivity.this, requestCode, permissions, grantResults);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
@@ -212,18 +203,15 @@ public class MainActivity extends AppCompatActivity{
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
                 final Weather weather = Utility.handleWeatherResponse(responseText);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (weather != null && "ok".equals(weather.status)) {
-                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
-                            editor.putString(weatherId,responseText);
-                            editor.putString(CONTENTLIST, DataUtil.listToString(contentList));
-                            editor.apply();
-                            initView();
-                        } else {
-                            LogUtil.e(ACTIVITY_TAG, "获取失败");
-                        }
+                runOnUiThread(() -> {
+                    if (weather != null && "ok".equals(weather.status)) {
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+                        editor.putString(weatherId,responseText);
+                        editor.putString(CONTENTLIST, DataUtil.listToString(contentList));
+                        editor.apply();
+                        initView();
+                    } else {
+                        LogUtil.e(ACTIVITY_TAG, "获取失败");
                     }
                 });
             }
@@ -243,22 +231,14 @@ public class MainActivity extends AppCompatActivity{
         popupWindow.setAnimationStyle(R.style.showPopupAnimation);
         popupWindow.showAsDropDown(mPopuView,0,- Utility.dip2px(this,175));
         bgView.setVisibility(View.VISIBLE);
-        TextView setting = (TextView) contentView.findViewById(R.id.tv_setting);
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,SettingActivity.class);
-                intent.putStringArrayListExtra("cityList", (ArrayList<String>) contentList);
-                startActivity(intent);
-                popupWindow.dismiss();
-                bgView.setVisibility(View.GONE);
-            }
+        TextView setting = contentView.findViewById(R.id.tv_setting);
+        setting.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+            intent.putStringArrayListExtra("cityList", (ArrayList<String>) contentList);
+            startActivity(intent);
+            popupWindow.dismiss();
+            bgView.setVisibility(View.GONE);
         });
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                bgView.setVisibility(View.GONE);
-            }
-        });
+        popupWindow.setOnDismissListener(() -> bgView.setVisibility(View.GONE));
     }
 }

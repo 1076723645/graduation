@@ -16,7 +16,7 @@
         android:layout_height="10dp"
         android:background="@color/index_bg_color"/>
 
-    <com.example.finaldesign.presenter.MiuiWeatherView
+    <com.example.finaldesign.ui.widget.MiuiWeatherView
         android:id="@+id/weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

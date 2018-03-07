@@ -1,4 +1,4 @@
-package com.example.finaldesign.presenter;
+package com.example.finaldesign.model.bean;
 
 /**
  * Created by Administrator on 2017/11/28.
@@ -6,17 +6,17 @@ package com.example.finaldesign.presenter;
 
 public class WeatherBean {
 
-    static final String SUN = "晴";
-    static final String CLOUDY = "阴";
-    static final String SNOW = "雪";
-    static final String RAIN = "雨";
-    static final String SUN_CLOUD = "多云";
-    static final String THUNDER = "雷";
+    public static final String SUN = "晴";
+    public static final String CLOUDY = "阴";
+    public static final String SNOW = "雪";
+    public static final String RAIN = "雨";
+    public static final String SUN_CLOUD = "多云";
+    public static final String THUNDER = "雷";
 
     public String weather;  //天气，取值为上面6种
-    int temperature; //温度值
-    String temperatureStr; //温度的描述值
-    String time; //时间值
+    public int temperature; //温度值
+    public String temperatureStr; //温度的描述值
+    public String time; //时间值
 
     public WeatherBean(String weather, int temperature, String time) {
         this.weather = weather;

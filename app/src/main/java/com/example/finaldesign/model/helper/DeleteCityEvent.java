@@ -1,4 +1,4 @@
-package com.example.finaldesign.presenter.Bean;
+package com.example.finaldesign.model.helper;
 
 import java.util.List;
 

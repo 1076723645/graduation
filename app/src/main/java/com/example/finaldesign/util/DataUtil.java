@@ -7,7 +7,7 @@ import com.example.finaldesign.R;
 import com.example.finaldesign.db.CityCode;
 import com.example.finaldesign.gson.HourlyForecast;
 import com.example.finaldesign.gson.Weather;
-import com.example.finaldesign.presenter.WeatherBean;
+import com.example.finaldesign.model.bean.WeatherBean;
 
 import org.litepal.crud.DataSupport;
 

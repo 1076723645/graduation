@@ -22,14 +22,14 @@ public class HttpUtil {
         client.newCall(request).enqueue(callback);
     }
 
-    public static String getJson(Context context, String fileName){
+    public static void getJson(Context context){
         StringBuilder stringBuilder = new StringBuilder();
         //获得assets资源管理器
         AssetManager assetManager = context.getAssets();
         //使用IO流读取json文件内容
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-                    assetManager.open(fileName),"utf-8"));
+                    assetManager.open("code.json"), "utf-8"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
@@ -37,7 +37,7 @@ public class HttpUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return stringBuilder.toString();
+        Utility.handleCityCodeResponce(stringBuilder.toString());
     }
 
 }

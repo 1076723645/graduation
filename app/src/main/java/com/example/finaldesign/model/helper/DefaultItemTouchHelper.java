@@ -1,6 +1,4 @@
-package com.example.finaldesign.presenter;
-
-import android.support.v7.widget.helper.ItemTouchHelper;
+package com.example.finaldesign.model.helper;
 
 /**
  * Created by Administrator on 2017/12/7.

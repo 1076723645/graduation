@@ -1,4 +1,4 @@
-package com.example.finaldesign.presenter;
+package com.example.finaldesign.util;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -19,7 +19,7 @@ public class SystemFit {
         }
     }
 
-    public static void fitSyswhite(Activity activity){
+    public static void fitSystemWhite(Activity activity){
         View decorView = activity.getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decorView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);

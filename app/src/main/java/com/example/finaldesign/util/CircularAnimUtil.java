@@ -1,4 +1,4 @@
-package com.example.finaldesign.presenter;
+package com.example.finaldesign.util;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -17,14 +17,14 @@ import android.widget.ImageView;
 
 public class CircularAnimUtil {
 
-    public static final long PERFECT_MILLS = 618;
-    public static final int MINI_RADIUS = 0;
+    private static final long PERFECT_MILLS = 618;
+    private static final int MINI_RADIUS = 0;
 
     /**
      * 向四周伸张，直到完成显示。
      */
     @SuppressLint("NewApi")
-    public static void show(View myView, float startRadius, long durationMills) {
+    private static void show(View myView, float startRadius, long durationMills) {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             myView.setVisibility(View.VISIBLE);
             return;
@@ -50,7 +50,7 @@ public class CircularAnimUtil {
      * 由满向中间收缩，直到隐藏。
      */
     @SuppressLint("NewApi")
-    public static void hide(final View myView, float endRadius, long durationMills) {
+    private static void hide(final View myView, float endRadius, long durationMills) {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             myView.setVisibility(View.INVISIBLE);
             return;
@@ -82,8 +82,7 @@ public class CircularAnimUtil {
      * 从指定View开始向四周伸张(伸张颜色或图片为colorOrImageRes), 然后进入另一个Activity,
      * 返回至 @thisActivity 后显示收缩动画。
      */
-    @SuppressLint("NewApi")
-    public static void startActivityForResult(
+    private static void startActivityForResult(
             final Activity thisActivity, final Intent intent, final Integer requestCode, final Bundle bundle,
             final View triggerView, int colorOrImageRes, final long durationMills) {
 

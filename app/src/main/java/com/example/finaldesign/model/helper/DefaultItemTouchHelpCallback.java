@@ -1,4 +1,4 @@
-package com.example.finaldesign.presenter;
+package com.example.finaldesign.model.helper;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

@@ -15,9 +15,9 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.example.finaldesign.R;
-import com.example.finaldesign.presenter.Bean.DeleteCityEvent;
-import com.example.finaldesign.presenter.DefaultItemTouchHelpCallback;
-import com.example.finaldesign.presenter.DefaultItemTouchHelper;
+import com.example.finaldesign.model.helper.DeleteCityEvent;
+import com.example.finaldesign.model.helper.DefaultItemTouchHelpCallback;
+import com.example.finaldesign.model.helper.DefaultItemTouchHelper;
 import com.example.finaldesign.ui.adapter.CityDeleteAdapter;
 import com.example.finaldesign.util.LogUtil;
 

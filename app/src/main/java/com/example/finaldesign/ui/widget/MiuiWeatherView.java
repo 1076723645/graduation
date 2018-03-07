@@ -1,4 +1,4 @@
-package com.example.finaldesign.presenter;
+package com.example.finaldesign.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -24,6 +24,7 @@ import android.view.ViewConfiguration;
 import android.widget.Scroller;
 
 import com.example.finaldesign.R;
+import com.example.finaldesign.model.bean.WeatherBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;

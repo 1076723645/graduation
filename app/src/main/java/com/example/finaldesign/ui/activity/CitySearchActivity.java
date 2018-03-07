@@ -23,6 +23,7 @@ import com.example.finaldesign.db.Province;
 import com.example.finaldesign.util.HttpUtil;
 import com.example.finaldesign.util.LogUtil;
 import com.example.finaldesign.util.NetUtils;
+import com.example.finaldesign.util.ToastUtil;
 import com.example.finaldesign.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -71,10 +72,10 @@ public class CitySearchActivity extends AppCompatActivity {
         initListener();
     }
     private void initView(){
-        backButton = (ImageView) findViewById(R.id.iv_back);
-        test = (TextView) findViewById(R.id.tv_name);
-        noNework = (TextView) findViewById(R.id.tv_no_network);
-        listView = (ListView) findViewById(R.id.list);
+        backButton = findViewById(R.id.iv_back);
+        test = findViewById(R.id.tv_name);
+        noNework = findViewById(R.id.tv_no_network);
+        listView = findViewById(R.id.list);
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,dataList);
         listView.setAdapter(adapter);
         if (!NetUtils.isConnected(this)){
@@ -83,50 +84,40 @@ public class CitySearchActivity extends AppCompatActivity {
             test.setText("添加城市");
         }
         else {
-
             queryProvinces();
         }
     }
 
     private void initListener(){
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (currentLevel == LEVEL_PROVINCE){
-                    selectedProvince = provinceList.get(position);
-                    queryCities();
-                }else if (currentLevel == LEVEL_CITY){
-                    selectedCity = cityList.get(position);
-                    queryCounties();
-                }else if (currentLevel == LEVEL_COUNTY){
-                    String weatherId = countyList.get(position).getWeatherId();
-                    Intent intent = new Intent(CitySearchActivity.this, MainActivity.class);
-                    intent.putExtra("weather_id", weatherId);
-                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CitySearchActivity.this).toBundle());
-                    finish();
-                }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            if (currentLevel == LEVEL_PROVINCE){
+                selectedProvince = provinceList.get(position);
+                queryCities();
+            }else if (currentLevel == LEVEL_CITY){
+                selectedCity = cityList.get(position);
+                queryCounties();
+            }else if (currentLevel == LEVEL_COUNTY){
+                String weatherId = countyList.get(position).getWeatherId();
+                Intent intent = new Intent(CitySearchActivity.this, MainActivity.class);
+                intent.putExtra("weather_id", weatherId);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CitySearchActivity.this).toBundle());
+                finish();
             }
         });
-        noNework.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (NetUtils.isConnected(CitySearchActivity.this)){
-                    noNework.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
-                    queryProvinces();
-                }else {
-                    Toast.makeText(CitySearchActivity.this, "没有网络，请稍后再试", Toast.LENGTH_SHORT).show();
-                }
+        noNework.setOnClickListener(v -> {
+            if (NetUtils.isConnected(this)){
+                noNework.setVisibility(View.GONE);
+                listView.setVisibility(View.VISIBLE);
+                queryProvinces();
+            }else {
+                ToastUtil.shortShow("没有网络，请稍后再试");
             }
         });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentLevel == LEVEL_COUNTY){
-                    queryCities();
-                }else if (currentLevel == LEVEL_CITY){
-                    queryProvinces();
-                }
+        backButton.setOnClickListener(v -> {
+            if (currentLevel == LEVEL_COUNTY){
+                queryCities();
+            }else if (currentLevel == LEVEL_CITY){
+                queryProvinces();
             }
         });
     }
@@ -195,12 +186,9 @@ public class CitySearchActivity extends AppCompatActivity {
         HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        closeProgressDialog();
-                        LogUtil.d("error","加载失败");
-                    }
+                runOnUiThread(() -> {
+                    closeProgressDialog();
+                    LogUtil.d("error","加载失败");
                 });
             }
 
@@ -217,17 +205,14 @@ public class CitySearchActivity extends AppCompatActivity {
                     result = Utility.handleCountyResponce(responseText,selectedCity.getId());
                 }
                 if (result){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            closeProgressDialog();
-                            if ("province".equals(type)){
-                                queryProvinces();
-                            }else if ("city".equals(type)){
-                                queryCities();
-                            }else if ("county".equals(type)){
-                                queryCounties();
-                            }
+                    runOnUiThread(() -> {
+                        closeProgressDialog();
+                        if ("province".equals(type)){
+                            queryProvinces();
+                        }else if ("city".equals(type)){
+                            queryCities();
+                        }else if ("county".equals(type)){
+                            queryCounties();
                         }
                     });
                 }
