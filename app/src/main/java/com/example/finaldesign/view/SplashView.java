@@ -11,6 +11,6 @@ import com.example.finaldesign.model.bean.CityMessage;
 
 public interface SplashView extends BaseView {
     void onLocationSuccess(Location location);
-    void loadSuccess();
+    //void loadSuccess();
     void getCitySuccess(CityMessage cityMessage);
 }

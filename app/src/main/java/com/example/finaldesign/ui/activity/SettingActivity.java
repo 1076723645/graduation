@@ -63,7 +63,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private void initView(){
 
-        cacheSize = (TextView) findViewById(R.id.tv_cache);
+        cacheSize = findViewById(R.id.tv_cache);
         mTextViewList.add((TextView) findViewById(R.id.t));
         mTextViewList.add((TextView) findViewById(R.id.tt));
         mTextViewList.add((TextView) findViewById(R.id.textView5));
@@ -123,46 +123,32 @@ public class SettingActivity extends AppCompatActivity {
 
         editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
 
-        sbNight.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                changeTheme();
+        sbNight.setOnCheckedChangeListener((view, isChecked) -> changeTheme());
+        autoUpdate.setOnCheckedChangeListener((view, isChecked) -> {
+            if (prefs.getString("autoUpdate","0").equals("0")) {
+                editor.putString("autoUpdate","1");
+                editor.apply();
+            } else {
+                editor.putString("autoUpdate","0");
+                editor.apply();
             }
         });
-        autoUpdate.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                if (prefs.getString("autoUpdate","0").equals("0")) {
-                    editor.putString("autoUpdate","1");
-                    editor.apply();
-                } else {
-                    editor.putString("autoUpdate","0");
-                    editor.apply();
-                }
+        changeRemind.setOnCheckedChangeListener((view, isChecked) -> {
+            if (prefs.getString("changeRemind","0").equals("0")) {
+                editor.putString("changeRemind","1");
+                editor.apply();
+            } else {
+                editor.putString("changeRemind","0");
+                editor.apply();
             }
         });
-        changeRemind.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                if (prefs.getString("changeRemind","0").equals("0")) {
-                    editor.putString("changeRemind","1");
-                    editor.apply();
-                } else {
-                    editor.putString("changeRemind","0");
-                    editor.apply();
-                }
-            }
-        });
-        noDisturb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                if (prefs.getString("noDisturb","0").equals("0")) {
-                    editor.putString("noDisturb","1");
-                    editor.apply();
-                } else {
-                    editor.putString("noDisturb","0");
-                    editor.apply();
-                }
+        noDisturb.setOnCheckedChangeListener((view, isChecked) -> {
+            if (prefs.getString("noDisturb","0").equals("0")) {
+                editor.putString("noDisturb","1");
+                editor.apply();
+            } else {
+                editor.putString("noDisturb","0");
+                editor.apply();
             }
         });
       /*  cacheSize.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +174,9 @@ public class SettingActivity extends AppCompatActivity {
         theme.resolveAttribute(R.attr.TextColor, textColor, true);
         theme.resolveAttribute(R.attr.Background, background, true);
         theme.resolveAttribute(R.attr.Background, lineColor, true);
-        LinearLayout layout = (LinearLayout) findViewById(R.id.ll);
+        LinearLayout layout = findViewById(R.id.ll);
         layout.setBackgroundResource(background.resourceId);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setBackgroundResource(background.resourceId);
         for (TextView textView : mTextViewList) {
             textView.setTextColor(getResources().getColor(textColor.resourceId));
@@ -202,7 +188,7 @@ public class SettingActivity extends AppCompatActivity {
         for (int childIndex = 0; childIndex < childCount; childIndex++) {
             ViewGroup childView = (ViewGroup) recyclerView.getChildAt(childIndex);
             childView.setBackgroundResource(background.resourceId);
-            TextView nickName = (TextView) childView.findViewById(R.id.tv_name);
+            TextView nickName = childView.findViewById(R.id.tv_name);
             nickName.setTextColor(getResources().getColor(textColor.resourceId));
             View motto = childView.findViewById(R.id.line);
             motto.setBackgroundResource(background.resourceId);

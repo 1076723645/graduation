@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -112,7 +113,7 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
     public void initView(View v){
         toolbar = (CompatToolbar) v.findViewById(R.id.toolbar);
         toolbar.setAlpha(0);
-         scrollView = (NestedScrollView) v.findViewById(R.id.scrollView);
+        scrollView = (NestedScrollView) v.findViewById(R.id.scrollView);
         scrollView.setOnScrollChangeListener(this);
         swipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.swipe_refresh);
         titleCity = (TextView)v.findViewById(R.id.weather_city_name);
@@ -164,15 +165,12 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
             }
         }
         swipeRefresh.setColorSchemeResources(R.color.btn_blue);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (NetUtils.isConnected(getContext())) {
-                    requestWeather(weatherId);
-                }else {
-                    Toast.makeText(getContext(), "无网络连接，请检查网络", Toast.LENGTH_SHORT).show();
-                    swipeRefresh.setRefreshing(false);
-                }
+        swipeRefresh.setOnRefreshListener(() -> {
+            if (NetUtils.isConnected(getContext())) {
+                requestWeather(weatherId);
+            }else {
+                Toast.makeText(getContext(), "无网络连接，请检查网络", Toast.LENGTH_SHORT).show();
+                swipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -191,29 +189,26 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
                 +weatherId+"&key=9437b90c51624dd08de1707b34416f91";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Toast.makeText(getContext(), "网络连接异常，请稍后重试", Toast.LENGTH_SHORT).show();
                 swipeRefresh.setRefreshing(false);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 final String responseText = response.body().string();
                 final Weather weather = Utility.handleWeatherResponse(responseText);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (weather!=null&&"ok".equals(weather.status)){
-                            //Log.i("weather",weather.toString());
-                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-                            editor.putString(weatherId,responseText);
-                            editor.apply();
-                            showWeatherInfo(weather);
-                        }else {
-                            Toast.makeText(getContext(), "服务器异常", Toast.LENGTH_SHORT).show();
-                        }
-                        swipeRefresh.setRefreshing(false);
+                getActivity().runOnUiThread(() -> {
+                    if (weather!=null&&"ok".equals(weather.status)){
+                        //Log.i("weather",weather.toString());
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+                        editor.putString(weatherId,responseText);
+                        editor.apply();
+                        showWeatherInfo(weather);
+                    }else {
+                        Toast.makeText(getContext(), "服务器异常", Toast.LENGTH_SHORT).show();
                     }
+                    swipeRefresh.setRefreshing(false);
                 });
             }
         });
@@ -313,12 +308,7 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
     }
 
     public void fullScroll(){//滑动到顶部
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
-            }
-        });
+        scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_UP));
     }
 
     @Override

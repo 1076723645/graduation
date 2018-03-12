@@ -8,6 +8,7 @@ import com.example.finaldesign.db.CityCode;
 import com.example.finaldesign.gson.HourlyForecast;
 import com.example.finaldesign.gson.Weather;
 import com.example.finaldesign.model.bean.WeatherBean;
+import com.example.finaldesign.model.bean.WeatherInfo;
 
 import org.litepal.crud.DataSupport;
 
@@ -148,6 +149,30 @@ public class DataUtil {
             temp = Integer.parseInt(hourly.temperature);
             String time = hourly.time_data.substring(hourly.time_data.length() - 5, hourly.time_data.length() - 3);
             info = DataUtil.getWeather(hourly.more.info);
+            Random random = new Random();
+            for (int k = 0; k < 3; k++) {
+                int intTime = Integer.parseInt(time);
+                String finalTime = String.valueOf(intTime + k) + ":00";
+                int rand = random.nextInt(2); //随机温度
+                WeatherBean weatherBean = new WeatherBean(info, temp + rand, finalTime);
+                data.add(weatherBean);
+            }
+        }
+        return data;
+    }
+
+    public static List<WeatherBean> getHourData(WeatherInfo.HeWeatherBean weather) {//获取24小时天气预报
+        List<WeatherBean> data = new ArrayList<>();
+        WeatherInfo.HeWeatherBean.HourlyForecastBean nowList = weather.getHourly_forecast().get(0);
+        int temp = Integer.parseInt(nowList.getTmp());
+        String info = DataUtil.getWeather(nowList.getCond().getTxt());
+        WeatherBean now = new WeatherBean(info, temp + 1, "现在");
+        data.add(now);
+        for (int i = 0; i < weather.getHourly_forecast().size(); i++) {
+            WeatherInfo.HeWeatherBean.HourlyForecastBean hourly = weather.getHourly_forecast().get(i);
+            temp = Integer.parseInt(hourly.getTmp());
+            String time = hourly.getDate().substring(hourly.getDate().length() - 5, hourly.getDate().length() - 3);
+            info = DataUtil.getWeather(hourly.getCond().getTxt());
             Random random = new Random();
             for (int k = 0; k < 3; k++) {
                 int intTime = Integer.parseInt(time);

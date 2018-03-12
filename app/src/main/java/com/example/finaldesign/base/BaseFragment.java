@@ -2,6 +2,7 @@ package com.example.finaldesign.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,13 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Created by hui on 2018/2/27.
  */
 
-public abstract class BaseFragment<T extends BasePresenter> extends SupportFragment{
+public abstract class BaseFragment<T extends Presenter> extends SimpleFragment implements BaseView{
 
     protected T mPresenter;
-    protected View mView;
-    protected Context mContext;
-    private Unbinder mUnbind;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(getLayoutId(), null);
         return mView;
     }
@@ -36,27 +34,18 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initPresenter();
-        mUnbind = ButterKnife.bind(this, view);
         mPresenter.onCreate();
-    }
-
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-        initData();
+        mPresenter.attachView(this);
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbind.unbind();
         mPresenter.onStop();
     }
 
-    protected abstract int getLayoutId();
-    protected abstract void initData();
     protected abstract void initPresenter();
 }

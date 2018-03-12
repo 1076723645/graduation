@@ -1,6 +1,7 @@
 package com.example.finaldesign.ui.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 
 import android.content.Intent;
@@ -133,12 +134,13 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private void initView(){
         bgView = findViewById(R.id.v_bg);
-        mPopuView = (TextView) findViewById(R.id.text_menu);
+        mPopuView = findViewById(R.id.text_menu);
         mPopuView.bringToFront();
-        ImageView addCity = (ImageView)findViewById(R.id.add_menu);
-        viewPager = (ViewPager) findViewById(R.id.city_viewpager);
+        ImageView addCity = findViewById(R.id.add_menu);
+        viewPager = findViewById(R.id.city_viewpager);
         for(int i=0;i<contentList.size();i++){
             WeatherFragment weatherFragment = WeatherFragment.newInstance(contentList, i);
             fragmentList.add(weatherFragment);
@@ -147,21 +149,13 @@ public class MainActivity extends AppCompatActivity{
         adapter.setData((ArrayList<WeatherFragment>) fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
-        addCity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,CityManagerActivity.class);
-                intent.putStringArrayListExtra("list", (ArrayList<String>) contentList);
-                startActivityForResult(intent, 1, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
-            }
+        addCity.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this,CityManagerActivity.class);
+            intent.putStringArrayListExtra("list", (ArrayList<String>) contentList);
+            startActivityForResult(intent, 1, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
         });
-        ImageView setting = (ImageView)findViewById(R.id.setting);
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopupWindow();
-            }
-        });
+        ImageView setting = findViewById(R.id.setting);
+        setting.setOnClickListener(v -> showPopupWindow());
     }
 
     @Override

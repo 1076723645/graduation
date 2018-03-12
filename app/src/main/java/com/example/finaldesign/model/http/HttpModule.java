@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpModule {
     private Context mCntext;
-    private static String BASE_URL = "http://api.map.baidu.com/";
+    private static String BASE_URL = "http://guolin.tech/";
     private OkHttpClient client = createOkHttp();
 
     private GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
@@ -29,18 +29,16 @@ public class HttpModule {
         }
         return instance;
     }
-   /* public static HttpModule getInstance(Context context,String url){
-        if (instance == null){
-            instance = new HttpModule(context,url);
-        }
-        return instance;
+    /*public static HttpModule getInstance(Context context,String url){
+        instance = null;
+        return new HttpModule(context,NEWBASEURL);
     }*/
 
     private HttpModule(Context mContext){
         mCntext = mContext;
         init();
     }
-  /*  private HttpModule(Context mContext,String url){
+    /*private HttpModule(Context mContext,String url){
         mCntext = mContext;
         changeApiBaseUrl(url);
     }
@@ -57,7 +55,7 @@ public class HttpModule {
 
     private void resetApp() {
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl("http://guolin.tech/")
                 .client(client)
                 .addConverterFactory(factory)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -67,10 +65,10 @@ public class HttpModule {
         return mRetrofit.create(BiSheApi.class);
     }
 
-  /*  private void changeApiBaseUrl(String newApiBaseUrl) {
+    /*private void changeApiBaseUrl(String newApiBaseUrl) {
         BASE_URL = newApiBaseUrl;
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(newApiBaseUrl)
                 .client(client)
                 .addConverterFactory(factory)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

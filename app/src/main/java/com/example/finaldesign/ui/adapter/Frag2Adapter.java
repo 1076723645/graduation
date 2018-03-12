@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import com.example.finaldesign.ui.fragment.WeatherFragment;
+
+
+import com.example.finaldesign.ui.fragment.WeatherFragment2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +15,18 @@ import java.util.List;
  * Created by hui on 2017/11/1.
  */
 
-public class FragAdapter extends FragmentStatePagerAdapter {
+public class Frag2Adapter extends FragmentStatePagerAdapter {
 
-    private List<WeatherFragment> fragments = new ArrayList<>();
+    private List<WeatherFragment2> fragments = new ArrayList<>();
     private Context mContext;
     private FragmentManager fm;
 
-    public FragAdapter(FragmentManager fm, Context context) {
+    public Frag2Adapter(FragmentManager fm, Context context) {
         super(fm);
         this.mContext = context;
     }
 
-    public void setData(ArrayList<WeatherFragment> lists) {
+    public void setData(ArrayList<WeatherFragment2> lists) {
         this.fragments = lists;
     }
 

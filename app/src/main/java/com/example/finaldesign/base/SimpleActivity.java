@@ -12,12 +12,13 @@ import com.example.finaldesign.util.SystemFit;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportActivity;
 
 /**
  * Created by hui on 2017/8/11.
  */
 
-public abstract class SimpleActivity extends AppCompatActivity {
+public abstract class SimpleActivity extends SupportActivity {
 
     protected Context mContext;
     private Unbinder mUnbind;
@@ -25,7 +26,6 @@ public abstract class SimpleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SystemFit.fitSystemWhite(this);
         setContentView(getLayoutId());
         mUnbind = ButterKnife.bind(this);
         mContext = this;

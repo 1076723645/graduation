@@ -7,5 +7,6 @@
         <mapping class="com.example.finaldesign.db.City"/>
         <mapping class="com.example.finaldesign.db.County"/>
         <mapping class="com.example.finaldesign.db.CityCode"/>
+        <mapping class="com.example.finaldesign.model.bean.WeatherInfo"/>
     </list>
 </litepal>

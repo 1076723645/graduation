@@ -47,15 +47,12 @@ public class CityManagerAdapter extends RecyclerView.Adapter<CityManagerAdapter.
         }
         View v = LayoutInflater.from(mContext).inflate(R.layout.recycle_item, parent, false);
         final ViewHolder holder =  new ViewHolder(v);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                Intent intent = new Intent();
-                intent.putExtra("data_return",position);
-                activity.setResult(Activity.RESULT_OK,intent);
-                activity.finish();
-            }
+        holder.cardView.setOnClickListener(v1 -> {
+            int position = holder.getAdapterPosition();
+            Intent intent = new Intent();
+            intent.putExtra("data_return",position);
+            activity.setResult(Activity.RESULT_OK,intent);
+            activity.finish();
         });
         return holder;
     }

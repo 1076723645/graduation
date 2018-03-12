@@ -68,7 +68,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                              }));
     }
 
-    public void loadCityCode(){
+   /* public void loadCityCode(){
         addSubscribe(Flowable.create(emitter -> {
             HttpUtil.getJson(mContext);
             emitter.onNext("");
@@ -81,5 +81,5 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                              mView.loadSuccess();
                          }
                      }));
-    }
+    }*/
 }

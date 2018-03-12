@@ -12,7 +12,7 @@
         <item name="TextColor">@color/text_color_black</item>
         <item name="TextColor2">@color/reg_choose_color</item>
         <item name="IndexColor">@color/index_bg_color</item>
-        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="NightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -22,11 +22,12 @@
         <item name="Background">@color/color3F3F3F</item>
         <item name="TextColor">@color/color8A9599</item>
         <item name="TextColor2">@color/reg_choose_color</item>
-        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="showPopupAnimation" parent="android:Animation">
