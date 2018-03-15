@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.finaldesign.R;
 import com.example.finaldesign.gson.Weather;
+import com.example.finaldesign.model.bean.WeatherInfo;
+import com.example.finaldesign.util.SharePreferencesUtils;
 import com.example.finaldesign.util.Utility;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import java.util.List;
 
 public class CityDeleteAdapter extends RecyclerView.Adapter<CityDeleteAdapter.ViewHolder>{
 
-    private List<Weather> mWeatherList = new ArrayList<>();
+    private List<WeatherInfo> mWeatherList = new ArrayList<>();
     private List<String> list = new ArrayList<>();
     private Context mContext;
 
@@ -33,10 +35,9 @@ public class CityDeleteAdapter extends RecyclerView.Adapter<CityDeleteAdapter.Vi
         if (mContext == null){
             mContext = parent.getContext();
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         for (int i=0; i<list.size(); i++) {
-            String response = prefs.getString(list.get(i),null);
-            Weather weather = Utility.handleWeatherResponse(response);
+            String responseText = SharePreferencesUtils.getString(mContext, list.get(i), "");
+            WeatherInfo weather = WeatherInfo.objectFromData(responseText);
             mWeatherList.add(weather);
         }
         View v = LayoutInflater.from(mContext).inflate(R.layout.item_delete_city, parent, false);
@@ -45,8 +46,8 @@ public class CityDeleteAdapter extends RecyclerView.Adapter<CityDeleteAdapter.Vi
 
     @Override
     public void onBindViewHolder(CityDeleteAdapter.ViewHolder holder, int position) {
-        Weather weather = mWeatherList.get(position);
-        holder.address.setText(weather.basic.cityName);
+        WeatherInfo weather = mWeatherList.get(position);
+        holder.address.setText(weather.getHeWeather5().get(0).getBasic().getCity());
     }
 
 
@@ -67,8 +68,8 @@ public class CityDeleteAdapter extends RecyclerView.Adapter<CityDeleteAdapter.Vi
        public ViewHolder(View view) {
             super(view);
             cardView = (CardView) view;
-            delete = (ImageView)view.findViewById(R.id.iv_delete);
-            address = (TextView) view.findViewById(R.id.tv_name);
+            delete = view.findViewById(R.id.iv_delete);
+            address = view.findViewById(R.id.tv_name);
         }
     }
 }

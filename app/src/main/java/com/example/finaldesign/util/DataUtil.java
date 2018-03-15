@@ -161,15 +161,15 @@ public class DataUtil {
         return data;
     }
 
-    public static List<WeatherBean> getHourData(WeatherInfo.HeWeatherBean weather) {//获取24小时天气预报
+    public static List<WeatherBean> getHourData(WeatherInfo.HeWeather5Bean weather) {//获取24小时天气预报
         List<WeatherBean> data = new ArrayList<>();
-        WeatherInfo.HeWeatherBean.HourlyForecastBean nowList = weather.getHourly_forecast().get(0);
+        WeatherInfo.HeWeather5Bean.HourlyForecastBean nowList = weather.getHourly_forecast().get(0);
         int temp = Integer.parseInt(nowList.getTmp());
         String info = DataUtil.getWeather(nowList.getCond().getTxt());
         WeatherBean now = new WeatherBean(info, temp + 1, "现在");
         data.add(now);
         for (int i = 0; i < weather.getHourly_forecast().size(); i++) {
-            WeatherInfo.HeWeatherBean.HourlyForecastBean hourly = weather.getHourly_forecast().get(i);
+            WeatherInfo.HeWeather5Bean.HourlyForecastBean hourly = weather.getHourly_forecast().get(i);
             temp = Integer.parseInt(hourly.getTmp());
             String time = hourly.getDate().substring(hourly.getDate().length() - 5, hourly.getDate().length() - 3);
             info = DataUtil.getWeather(hourly.getCond().getTxt());

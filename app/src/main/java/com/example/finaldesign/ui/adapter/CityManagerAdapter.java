@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.example.finaldesign.R;
 import com.example.finaldesign.gson.Weather;
+import com.example.finaldesign.model.bean.WeatherInfo;
 import com.example.finaldesign.util.DataUtil;
+import com.example.finaldesign.util.SharePreferencesUtils;
 import com.example.finaldesign.util.Utility;
 
 import java.util.ArrayList;
@@ -24,12 +26,12 @@ import java.util.List;
 
 
 /**
- * Created by Administrator on 2017/11/1.
+ * Created by hui on 2017/11/1.
  */
 
 public class CityManagerAdapter extends RecyclerView.Adapter<CityManagerAdapter.ViewHolder> {
 
-    private List<Weather> mWeatherList = new ArrayList<>();
+    private List<WeatherInfo> mWeatherList = new ArrayList<>();
     private List<String> list = new ArrayList<>();
     private Activity activity;
     private Context mContext;
@@ -39,10 +41,9 @@ public class CityManagerAdapter extends RecyclerView.Adapter<CityManagerAdapter.
         if (mContext == null){
             mContext = parent.getContext();
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         for (int i=0; i<list.size(); i++) {
-            String response = prefs.getString(list.get(i),null);
-            Weather weather = Utility.handleWeatherResponse(response);
+            String responseText = SharePreferencesUtils.getString(mContext, list.get(i), "");
+            WeatherInfo weather = WeatherInfo.objectFromData(responseText);
             mWeatherList.add(weather);
         }
         View v = LayoutInflater.from(mContext).inflate(R.layout.recycle_item, parent, false);
@@ -59,20 +60,21 @@ public class CityManagerAdapter extends RecyclerView.Adapter<CityManagerAdapter.
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(CityManagerAdapter.ViewHolder holder, int position) {
-        Weather weather = mWeatherList.get(position);
-        String windLv = weather.now.windMore.how;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        WeatherInfo weather = mWeatherList.get(position);
+        WeatherInfo.HeWeather5Bean weatherBean = weather.getHeWeather5().get(0);
+        String windLv = weatherBean.getNow().getWind().getSc();
         if (windLv.equals("微风")){
             windLv = "1";
         }
-        holder.temp.setText(weather.now.temperature+"°");
-        holder.max.setText(weather.forecastList.get(0).temperature.max+"°");
-        holder.min.setText(weather.forecastList.get(0).temperature.min+"°");
-        holder.wind.setText(weather.now.windMore.where+windLv+"级");
-        holder.hum.setText("湿度"+weather.now.humidity+"%");
-        holder.airQul.setText("空气"+weather.aqi.city.qlty);
-        holder.address.setText(weather.basic.cityName);
-        holder.cond.setImageResource(DataUtil.getWeatherColourPng(weather.now.more.info));
+        holder.temp.setText(weatherBean.getNow().getTmp() + "°");
+        holder.max.setText(weatherBean.getDaily_forecast().get(0).getTmp().getMax() + "°");
+        holder.min.setText(weatherBean.getDaily_forecast().get(0).getTmp().getMin() + "°");
+        holder.wind.setText(weatherBean.getNow().getWind().getDir() + windLv + "级");
+        holder.hum.setText("湿度" + weatherBean.getNow().getHum() + "%");
+        holder.airQul.setText("空气" + weatherBean.getAqi().getCity().getQlty());
+        holder.address.setText(weatherBean.getBasic().getCity());
+        holder.cond.setImageResource(DataUtil.getWeatherColourPng(weatherBean.getNow().getCond().getTxt()));
     }
 
     public CityManagerAdapter(List<String> List, Activity activity){
@@ -101,17 +103,17 @@ public class CityManagerAdapter extends RecyclerView.Adapter<CityManagerAdapter.
         TextView min;
         TextView temp;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             cardView = (CardView) view;
-            cond = (ImageView)view.findViewById(R.id.iv_cond);
-            address = (TextView) view.findViewById(R.id.tv_address);
-            airQul = (TextView) view.findViewById(R.id.tv_air_qul);
-            hum = (TextView) view.findViewById(R.id.tv_hum);
-            wind = (TextView) view.findViewById(R.id.tv_wind);
-            max = (TextView) view.findViewById(R.id.tv_max);
-            min = (TextView) view.findViewById(R.id.tv_min);
-            temp = (TextView) view.findViewById(R.id.tv_temp);
+            cond = view.findViewById(R.id.iv_cond);
+            address = view.findViewById(R.id.tv_address);
+            airQul = view.findViewById(R.id.tv_air_qul);
+            hum = view.findViewById(R.id.tv_hum);
+            wind = view.findViewById(R.id.tv_wind);
+            max = view.findViewById(R.id.tv_max);
+            min = view.findViewById(R.id.tv_min);
+            temp = view.findViewById(R.id.tv_temp);
         }
     }
 }

@@ -31,7 +31,6 @@ public class CityDeleteActivity extends AppCompatActivity {
 
     private List<String> contentList = new ArrayList<>();
     private static final String ACTIVITY_TAG="CityDeleteActivity";
-    private RecyclerView recyclerView;
     private CityDeleteAdapter adapter;
     private Boolean isChanged;
     private Button cancel,sure;
@@ -54,17 +53,15 @@ public class CityDeleteActivity extends AppCompatActivity {
     }
 
     private void initView(){
-        recyclerView = (RecyclerView) findViewById(R.id.rv_city);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.rv_city);
         adapter = new CityDeleteAdapter(contentList);
-        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         DefaultItemTouchHelper itemTouchHelper = new DefaultItemTouchHelper(onItemTouchCallbackListener);
         itemTouchHelper.attachToRecyclerView(recyclerView);
         itemTouchHelper.setDragEnable(true);
         itemTouchHelper.setSwipeEnable(true);
-        cancel = (Button) findViewById(R.id.btn_cancel);
-        sure = (Button) findViewById(R.id.btn_sure);
+        cancel = findViewById(R.id.btn_cancel);
+        sure = findViewById(R.id.btn_sure);
     }
 
     private void initDate(){
@@ -75,25 +72,16 @@ public class CityDeleteActivity extends AppCompatActivity {
     }
 
     private void initListener(){
-        sure.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-                if (isChanged) {
-                    EventBus.getDefault().post(new DeleteCityEvent(contentList));
-                    Intent intent = new Intent();
-                    intent.putStringArrayListExtra("return", (ArrayList<String>) contentList);
-                    setResult(Activity.RESULT_OK, intent);
-                }
-                finish();
+        sure.setOnClickListener(v -> {
+            if (isChanged) {
+                EventBus.getDefault().post(new DeleteCityEvent(contentList));
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("return", (ArrayList<String>) contentList);
+                setResult(Activity.RESULT_OK, intent);
             }
+            finish();
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        cancel.setOnClickListener(v -> finish());
     }
 
     private DefaultItemTouchHelpCallback.OnItemTouchCallbackListener onItemTouchCallbackListener = new DefaultItemTouchHelpCallback.OnItemTouchCallbackListener() {

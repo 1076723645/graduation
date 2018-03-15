@@ -23,6 +23,6 @@ public interface BiSheApi {
     /**
      *获取天气信息
      */
-    @GET("http://guolin.tech/api/weather")
-    Flowable<WeatherInfo> getWeatherInfo(@Query("cityid") String name, @Query("key") String key);
+    @GET("https://free-api.heweather.com/v5/weather")
+    Flowable<WeatherInfo> getWeatherInfo(@Query("city") String name, @Query("key") String key);
 }

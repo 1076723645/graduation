@@ -3,34 +3,37 @@ package com.example.finaldesign.ui.activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 
 import com.example.finaldesign.R;
+import com.example.finaldesign.base.SimpleActivity;
+import com.example.finaldesign.ui.adapter.CityManagerAdapter;
 import com.example.finaldesign.util.CircularAnimUtil;
 import com.example.finaldesign.model.helper.DiffCallBack;
-import com.example.finaldesign.ui.adapter.CityManagerAdapter;
 import com.example.finaldesign.util.DataUtil;
 import com.example.finaldesign.util.LogUtil;
+import com.example.finaldesign.util.SharePreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CityManagerActivity extends AppCompatActivity {
+import butterknife.BindView;
+
+public class CityManagerActivity extends SimpleActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.recycle_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     private List<String> contentList = new ArrayList<>();
     private static final String ACTIVITY_TAG="CityManagerActivity";
@@ -38,44 +41,28 @@ public class CityManagerActivity extends AppCompatActivity {
     private CityManagerAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            Transition explode = TransitionInflater.from(this).inflateTransition(R.transition.explode);
-            Transition fade = TransitionInflater.from(this).inflateTransition(R.transition.fade);
-            getWindow().setExitTransition(fade);
-            getWindow().setEnterTransition(explode);
-            getWindow().setReenterTransition(explode);
-            getWindow().setReturnTransition(fade);
-        }
-        setContentView(R.layout.activity_city_managre);
-        contentList =  getIntent().getStringArrayListExtra("list");
-        LogUtil.d(ACTIVITY_TAG,contentList.toString());
-        initView();
+    protected int getLayoutId() {
+        return R.layout.activity_city_managre;
     }
 
-
-    private void initView(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    @Override
+    protected void initData() {
+        String content = SharePreferencesUtils.getString(mContext,CONTENTLIST,"");
+        if (!content.equals("")) {
+            contentList = new ArrayList<>(DataUtil.stringToList(content));
+            LogUtil.d(ACTIVITY_TAG, contentList.toString());
+        }
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
-        if (actionbar != null){
+        if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
         }
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new CityManagerAdapter(contentList,this);
-        recyclerView.setLayoutManager(layoutManager);
+        adapter = new CityManagerAdapter(contentList, this);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(adapter);
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CityManagerActivity.this,CitySearchActivity.class);
-                CircularAnimUtil.startActivity(CityManagerActivity.this,intent,fab,R.color.colorPrimary);
-            }
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(CityManagerActivity.this, CitySearchActivity.class);
+            CircularAnimUtil.startActivity(CityManagerActivity.this, intent, fab, R.color.colorPrimary);
         });
     }
 

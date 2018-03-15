@@ -76,6 +76,7 @@ public class Main2Activity extends SimpleActivity{
             if (addressCity != null){
                 LogUtil.e(addressCity);
                 contentList.add(addressCity);
+                SharePreferencesUtils.put(mContext,CONTENTLIST,DataUtil.listToString(contentList));
                 initView();
             }else {
                 startActivityFinish(CitySearchActivity.class);

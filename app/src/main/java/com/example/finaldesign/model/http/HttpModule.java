@@ -55,7 +55,7 @@ public class HttpModule {
 
     private void resetApp() {
         mRetrofit = new Retrofit.Builder()
-                .baseUrl("http://guolin.tech/")
+                .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(factory)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

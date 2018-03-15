@@ -3,6 +3,7 @@ package com.example.finaldesign.ui.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -61,6 +62,7 @@ public class SettingActivity extends AppCompatActivity {
         initListener();
     }
 
+    @SuppressLint("FindViewByIdCast")
     private void initView(){
 
         cacheSize = findViewById(R.id.tv_cache);

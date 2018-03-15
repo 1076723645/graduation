@@ -44,24 +44,21 @@ public class CityWarnAdapter extends RecyclerView.Adapter<CityWarnAdapter.ViewHo
         }
         View v = LayoutInflater.from(mContext).inflate(R.layout.item_warnning, parent, false);
         final ViewHolder holder =  new ViewHolder(v);
-        holder.switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                int position = holder.getAdapterPosition();
-                if (prefs.getString(cityList.get(position)+"warn","0").equals("0")) {
-                    editor.putString(cityList.get(position)+"warn","1");
-                    editor.apply();
-                } else {
-                    editor.putString(cityList.get(position)+"warn","0");
-                    editor.apply();
-                }
+        holder.switchButton.setOnCheckedChangeListener((view, isChecked) -> {
+            int position = holder.getAdapterPosition();
+            if (prefs.getString(cityList.get(position)+"warn","0").equals("0")) {
+                editor.putString(cityList.get(position)+"warn","1");
+                editor.apply();
+            } else {
+                editor.putString(cityList.get(position)+"warn","0");
+                editor.apply();
             }
         });
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(CityWarnAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Weather weather = mWeatherList.get(position);
         holder.address.setText(weather.basic.cityName);
         if (prefs.getString(cityList.get(position)+"warn","0").equals("1")) {
@@ -86,8 +83,8 @@ public class CityWarnAdapter extends RecyclerView.Adapter<CityWarnAdapter.ViewHo
 
         ViewHolder(View view) {
             super(view);
-            address = (TextView) view.findViewById(R.id.tv_name);
-            switchButton = (SwitchButton) view.findViewById(R.id.sb_warning);
+            address = view.findViewById(R.id.tv_name);
+            switchButton = view.findViewById(R.id.sb_warning);
 
         }
     }

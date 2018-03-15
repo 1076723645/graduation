@@ -12,6 +12,18 @@
         <item name="TextColor">@color/text_color_black</item>
         <item name="TextColor2">@color/reg_choose_color</item>
         <item name="IndexColor">@color/index_bg_color</item>
+    </style>
+
+    <style name="SimpleTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="Background">@color/white</item>
+        <item name="TextColor">@color/text_color_black</item>
+        <item name="TextColor2">@color/reg_choose_color</item>
+        <item name="IndexColor">@color/index_bg_color</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 

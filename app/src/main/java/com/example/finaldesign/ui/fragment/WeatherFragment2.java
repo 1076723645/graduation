@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.example.finaldesign.R;
 import com.example.finaldesign.base.BaseFragment;
-import com.example.finaldesign.gson.Forecast;
 import com.example.finaldesign.model.bean.WeatherBean;
 import com.example.finaldesign.model.bean.WeatherInfo;
 import com.example.finaldesign.presenter.MainPresenter;
@@ -31,7 +30,6 @@ import com.example.finaldesign.util.ToastUtil;
 import com.example.finaldesign.view.MainView;
 import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +132,7 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
     }
 
     /**
+     * 初始化界面
      * 先获取缓存信息，然后从网络上获取，没有则直接从网上获取
      */
     @Override
@@ -190,7 +189,7 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
 
     @SuppressLint("SetTextI18n")
     private void showWeatherInfo(WeatherInfo weather){
-        WeatherInfo.HeWeatherBean weatherBean = weather.getHeWeather().get(0);
+        WeatherInfo.HeWeather5Bean weatherBean = weather.getHeWeather5().get(0);
         String cityName = weatherBean.getBasic().getCity();
         String degree = weatherBean.getNow().getTmp();
         String weatherInfo = weatherBean.getNow().getCond().getTxt();
@@ -226,7 +225,7 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
 
         forecastLayout.removeAllViews();
         for (int i=0;i<weatherBean.getDaily_forecast().size();i++){
-            WeatherInfo.HeWeatherBean.DailyForecastBean forecast = weatherBean.getDaily_forecast().get(i);
+            WeatherInfo.HeWeather5Bean.DailyForecastBean forecast = weatherBean.getDaily_forecast().get(i);
             View v = LayoutInflater.from(getActivity()).inflate(R.layout.forest_item, forecastLayout, false);
             TextView dataText = v.findViewById(R.id.forest_date);
             TextView infoText = v.findViewById(R.id.forest_info);
