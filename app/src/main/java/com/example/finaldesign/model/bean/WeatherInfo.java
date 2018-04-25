@@ -74,7 +74,7 @@ public class WeatherInfo{
         }
 
         public String getStatus() {
-            return status;
+            return status == null ? "" : status;
         }
 
         public void setStatus(String status) {

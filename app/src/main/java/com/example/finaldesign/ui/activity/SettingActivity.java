@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.support.v7.widget.Toolbar;
@@ -22,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.finaldesign.R;
 import com.example.finaldesign.ui.adapter.CityWarnAdapter;
@@ -66,15 +64,15 @@ public class SettingActivity extends AppCompatActivity {
     private void initView(){
 
         cacheSize = findViewById(R.id.tv_cache);
-        mTextViewList.add((TextView) findViewById(R.id.t));
-        mTextViewList.add((TextView) findViewById(R.id.tt));
-        mTextViewList.add((TextView) findViewById(R.id.textView5));
-        mTextViewList.add((TextView) findViewById(R.id.tv_night));
-        mTextViewList.add((TextView) findViewById(R.id.tv_0));
-        mTextViewList.add((TextView) findViewById(R.id.tv_1));
-        mTextViewList.add((TextView) findViewById(R.id.tv_2));
-        mTextViewList.add((TextView) findViewById(R.id.tv_3));
-        mTextViewList.add((TextView) findViewById(R.id.tv_4));
+        mTextViewList.add(findViewById(R.id.t));
+        mTextViewList.add(findViewById(R.id.tt));
+        mTextViewList.add(findViewById(R.id.textView5));
+        mTextViewList.add(findViewById(R.id.tv_night));
+        mTextViewList.add(findViewById(R.id.tv_0));
+        mTextViewList.add(findViewById(R.id.tv_1));
+        mTextViewList.add(findViewById(R.id.tv_2));
+        mTextViewList.add(findViewById(R.id.tv_3));
+        mTextViewList.add(findViewById(R.id.tv_4));
 
         mViewList.add(findViewById(R.id.v1));
         mViewList.add(findViewById(R.id.v2));
@@ -94,24 +92,22 @@ public class SettingActivity extends AppCompatActivity {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        TextView title = (TextView) findViewById(R.id.tv_title);
+        TextView title = findViewById(R.id.tv_title);
         title.setText("设置");
-        backButton = (ImageView) findViewById(R.id.iv_back);
-        recyclerView= (RecyclerView) findViewById(R.id.recycle_view);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        adapter = new CityWarnAdapter(cityList,this);
-        recyclerView.setLayoutManager(manager);
+        backButton = findViewById(R.id.iv_back);
+        recyclerView= findViewById(R.id.recycle_view);
+        adapter = new CityWarnAdapter(cityList);
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(false);
-        sbNight = (SwitchButton) findViewById(R.id.sb_night);
+        sbNight = findViewById(R.id.sb_night);
 
-        autoUpdate = (SwitchButton) findViewById(R.id.sb_update_weather);
+        autoUpdate = findViewById(R.id.sb_update_weather);
         autoUpdate.setChecked(prefs.getString("autoUpdate","0").equals("1"));
 
-        changeRemind = (SwitchButton) findViewById(R.id.sb_change_remind);
+        changeRemind = findViewById(R.id.sb_change_remind);
         changeRemind.setChecked(prefs.getString("changeRemind","0").equals("1"));
 
-        noDisturb = (SwitchButton) findViewById(R.id.sb_no_disturb);
+        noDisturb = findViewById(R.id.sb_no_disturb);
         noDisturb.setChecked(prefs.getString("noDisturb","0").equals("1"));
 
        /* try {

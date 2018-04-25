@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.finaldesign.App;
 import com.example.finaldesign.R;
 import com.example.finaldesign.base.BaseFragment;
 import com.example.finaldesign.model.bean.WeatherBean;
@@ -132,8 +133,7 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
     }
 
     /**
-     * 初始化界面
-     * 先获取缓存信息，然后从网络上获取，没有则直接从网上获取
+     * 初始化界面，读取缓存信息
      */
     @Override
     protected void initData() {
@@ -145,11 +145,6 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
         if (!responseText.equals("")){
             showWeatherInfo(WeatherInfo.objectFromData(responseText));
         }
-        if (NetUtils.isConnected(mContext)) {
-            mPresenter.getWeather(cityName);
-        }else{
-            ToastUtil.shortShow("无网络连接，请检查网络");
-        }
         swipeRefresh.setOnRefreshListener(() -> {
             if (NetUtils.isConnected(mContext)) {
                 mPresenter.getWeather(cityName);
@@ -158,6 +153,14 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
                 swipeRefresh.setRefreshing(false);
             }
         });
+    }
+
+    /**
+     * 网络懒加载
+     */
+    @Override
+    public void lazyLoad() {
+        mPresenter.getWeather(cityName);
     }
 
     @Override
@@ -173,9 +176,11 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
     @Override
     public void loadWeatherInfoSuccess(WeatherInfo weather) {
         swipeRefresh.setRefreshing(false);
+        if (weather.getHeWeather5().get(0).getStatus().equals("ok")){
+            showWeatherInfo(weather);
+        }
         String responseText = new Gson().toJson(weather, WeatherInfo.class);
-        SharePreferencesUtils.put(mContext,cityName,responseText);
-        showWeatherInfo(weather);
+        SharePreferencesUtils.put(mContext, cityName, responseText);
     }
 
     public static WeatherFragment2 newInstance(List<String> cityList, int flag){
@@ -262,11 +267,11 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
         pmBar.setText("PM25");
         pmBar.setDesText(pm25);
         pmBar.setShowText("首要污染物");
-        qulMore.setOnClickListener(v -> {
+        /*qulMore.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), AirDetailActivity.class);
             intent.putExtra("id",cityName);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-        });//空气质量
+        });//空气质量*/
 
         comfortText.setText(weatherBean.getSuggestion().getComf().getBrf());
         comfortInfo.setText(weatherBean.getSuggestion().getComf().getTxt());

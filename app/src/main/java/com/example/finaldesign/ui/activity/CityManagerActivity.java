@@ -1,5 +1,6 @@
 package com.example.finaldesign.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,11 +48,8 @@ public class CityManagerActivity extends SimpleActivity {
 
     @Override
     protected void initData() {
-        String content = SharePreferencesUtils.getString(mContext,CONTENTLIST,"");
-        if (!content.equals("")) {
-            contentList = new ArrayList<>(DataUtil.stringToList(content));
-            LogUtil.d(ACTIVITY_TAG, contentList.toString());
-        }
+        contentList = getIntent().getStringArrayListExtra("list");
+        LogUtil.d(ACTIVITY_TAG, contentList.toString());
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
@@ -71,6 +69,7 @@ public class CityManagerActivity extends SimpleActivity {
         return true;
     }
 
+    @SuppressLint("RestrictedApi")
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.delete:
@@ -80,11 +79,11 @@ public class CityManagerActivity extends SimpleActivity {
                 break;
             case android.R.id.home:
                 if (contentList.size() == 0){
-                    Intent intent1 = new Intent(CityManagerActivity.this,CitySearchActivity.class);
+                    Intent intent1 = new Intent(CityManagerActivity.this, CitySearchActivity.class);
                     startActivity(intent1);
                     finish();
                 }else {
-                    finish();
+                    onBackPressed();
                 }
                 break;
             default:

@@ -41,12 +41,13 @@ public abstract class SimpleFragment extends SupportFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mUnbind = ButterKnife.bind(this, view);
+        initData();
     }
 
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
-        initData();
+        lazyLoad();
     }
 
     @Override
@@ -57,4 +58,5 @@ public abstract class SimpleFragment extends SupportFragment {
 
     protected abstract int getLayoutId();
     protected abstract void initData();
+    protected abstract void lazyLoad();
 }

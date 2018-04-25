@@ -79,9 +79,9 @@ public class CityDeleteActivity extends AppCompatActivity {
                 intent.putStringArrayListExtra("return", (ArrayList<String>) contentList);
                 setResult(Activity.RESULT_OK, intent);
             }
-            finish();
+            onBackPressed();
         });
-        cancel.setOnClickListener(v -> finish());
+        cancel.setOnClickListener(v -> onBackPressed());
     }
 
     private DefaultItemTouchHelpCallback.OnItemTouchCallbackListener onItemTouchCallbackListener = new DefaultItemTouchHelpCallback.OnItemTouchCallbackListener() {

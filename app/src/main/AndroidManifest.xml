@@ -44,6 +44,7 @@
         <activity android:name=".ui.activity.AirDetailActivity" />
         <activity android:name=".ui.activity.CityChooseActivity" />
         <activity android:name=".ui.activity.Main2Activity"
+            android:launchMode="singleTask"
             android:theme="@style/SimpleTheme"/>
     </application>
 

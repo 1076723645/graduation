@@ -1,8 +1,11 @@
 package com.example.finaldesign.ui.activity;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,11 +53,6 @@ public class Main2Activity extends SimpleActivity{
     private PopupWindow popupWindow;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
@@ -84,6 +82,7 @@ public class Main2Activity extends SimpleActivity{
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private void initView(){
         for(int i=0;i<contentList.size();i++){
             WeatherFragment2 weatherFragment = WeatherFragment2.newInstance(contentList, i);
@@ -93,21 +92,80 @@ public class Main2Activity extends SimpleActivity{
         adapter.setData((ArrayList<WeatherFragment2>) fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
-        iv_add.setOnClickListener(view -> startActivity(CityManagerActivity.class));
+        iv_add.setOnClickListener(view -> {
+            Intent intent = new Intent(Main2Activity.this,CityManagerActivity.class);
+            intent.putStringArrayListExtra("list", (ArrayList<String>) contentList);
+            startActivityForResult(intent, 1, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        });
         setting.setOnClickListener(view -> showPopupWindow());
     }
 
+    /**
+     * 添加城市
+     * @param intent 城市名称
+     */
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        setIntent(intent);
+        String cityName = getIntent().getStringExtra("cityName");
+        LogUtil.d(cityName);
+        Boolean isExist = false;
+        for (int i=0; i<contentList.size(); i++){
+            if (cityName.equals(contentList.get(i))){
+                viewPager.setCurrentItem(i);
+                isExist = true;
+                LogUtil.i("城市已经存在");
+            }
+        }
+        if (!isExist) {
+            contentList.add(cityName);
+            WeatherFragment2 weatherFragment = WeatherFragment2.newInstance(contentList, contentList.size() - 1);
+            fragmentList.add(weatherFragment);
+            adapter.notifyDataSetChanged();
+            viewPager.setCurrentItem(contentList.size()-1);
+            weatherFragment.lazyLoad();
+            SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
+        }
+    }
+
+    /**
+     * 对应城市的回调
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if (resultCode == RESULT_OK){
+                    final int page = data.getIntExtra("data_return",0);
+                    viewPager.setCurrentItem(page);
+                    WeatherFragment2 weatherFragment = fragmentList.get(page);
+                    weatherFragment.fullScroll();
+                }
+                break;
+            default:
+        }
+    }
+
+    /**
+     * 修改源数据后进行更新
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(DeleteCityEvent event) {
         contentList = event.getMsg();
-        LogUtil.e("main",contentList.toString());
         fragmentList.clear();
+        for(int i=0;i<contentList.size();i++){
+            WeatherFragment2 weatherFragment = WeatherFragment2.newInstance(contentList, i);
+            fragmentList.add(weatherFragment);
+        }
         adapter.notifyDataSetChanged();
+        SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (popupWindow!=null && popupWindow.isShowing())
+            popupWindow.dismiss();
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

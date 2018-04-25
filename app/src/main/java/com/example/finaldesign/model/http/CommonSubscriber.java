@@ -32,7 +32,7 @@ public abstract class CommonSubscriber<T> extends ResourceSubscriber<T> {
             mView.showErrorMsg(t.getMessage());
         } else {
             Log.d(TAG, "onError: "+t.getMessage());
-            mView.showErrorMsg(t.getMessage());
+            mView.showErrorMsg("服务器开小差了");
         }
     }
 

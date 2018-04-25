@@ -18,6 +18,11 @@ import com.example.finaldesign.view.SplashView;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.ContentValues.TAG;
 
@@ -41,10 +46,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     public void getLocation(){
         addSubscribe(Flowable.create((FlowableOnSubscribe<Location>) emitter -> {
-            Location location = LocationUtils.getBestLocation(mContext);
+            Location location = LocationUtils.getNetWorkLocation(mContext);
             if (location!=null) {
                 emitter.onNext(location);
                 emitter.onComplete();
+            }else {
+                emitter.onError(new Throwable(""));
             }
         }, BackpressureStrategy.BUFFER)
                              .compose(RxUtil.transformScheduler())

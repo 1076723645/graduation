@@ -42,7 +42,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"/>
             <View
                 android:id="@+id/v3"
                 android:layout_width="match_parent"
@@ -400,7 +401,7 @@
                     android:id="@+id/tv_0"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="清除缓存"
+                    android:text="缓存大小"
                     android:textColor="?attr/TextColor"
                     android:layout_marginLeft="24dp"
                     android:layout_weight="1"/>

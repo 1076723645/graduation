@@ -97,9 +97,9 @@ public class CitySearchActivity extends AppCompatActivity {
                 selectedCity = cityList.get(position);
                 queryCounties();
             }else if (currentLevel == LEVEL_COUNTY){
-                String weatherId = countyList.get(position).getWeatherId();
-                Intent intent = new Intent(CitySearchActivity.this, MainActivity.class);
-                intent.putExtra("weather_id", weatherId);
+                String cityName = countyList.get(position).getCountyName();
+                Intent intent = new Intent(CitySearchActivity.this, Main2Activity.class);
+                intent.putExtra("cityName", cityName);
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CitySearchActivity.this).toBundle());
                 finish();
             }

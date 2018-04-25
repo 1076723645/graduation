@@ -38,8 +38,7 @@ public class FragAdapter extends FragmentStatePagerAdapter {
         return fragments.get(arg0);
     }
 
-    @Override
-    public int getCount() {
+    @Override    public int getCount() {
         return fragments.size();
     }
 }

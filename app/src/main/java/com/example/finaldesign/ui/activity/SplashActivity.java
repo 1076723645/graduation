@@ -40,19 +40,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
                 });
     }
 
-   /* private void isFirst(){
-        Boolean user_first = SharePreferencesUtils.getBoolean(mContext,SharePreferencesUtils.SP_FIRST,true);
-        if (user_first){
-            mPresenter.loadCityCode();
-        }else {
-            LogUtil.e("不是第一次");
-            Intent intent = new Intent(this, Main2Activity.class);
-            intent.putExtra("city",addressCity);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-            finish();
-        }
-    }
-*/
     @Override
     protected void initPresenter() {
         mPresenter = new SplashPresenter(this);
@@ -70,24 +57,14 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     public void onLocationSuccess(Location location) {
-        LogUtil.e(location.toString());
         mPresenter.getCityMessage(String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()));
     }
-
-   /* @Override
-    public void loadSuccess() {
-        LogUtil.e("加载成功");
-        SharePreferencesUtils.putBoolean(mContext,SharePreferencesUtils.SP_FIRST,false);
-        Intent intent = new Intent(this, Main2Activity.class);
-        intent.putExtra("city",addressCity);
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        finish();
-    }*/
 
     @Override
     public void getCitySuccess(CityMessage cityMessage) {
         LogUtil.e(cityMessage.toString());
         addressCity = cityMessage.getAddressComponent().getCity();
+        addressCity = addressCity.substring(0,addressCity.length()-1);
         if (addressCity!=null)
             LogUtil.e(addressCity);
         Intent intent = new Intent(this, Main2Activity.class);
