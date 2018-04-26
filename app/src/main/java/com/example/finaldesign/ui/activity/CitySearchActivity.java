@@ -98,6 +98,8 @@ public class CitySearchActivity extends AppCompatActivity {
                 queryCounties();
             }else if (currentLevel == LEVEL_COUNTY){
                 String cityName = countyList.get(position).getCountyName();
+                if (cityName.equals("乌鲁木齐牧试站"))
+                    cityName = "乌鲁木齐县";
                 Intent intent = new Intent(CitySearchActivity.this, Main2Activity.class);
                 intent.putExtra("cityName", cityName);
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(CitySearchActivity.this).toBundle());

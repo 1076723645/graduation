@@ -3,9 +3,8 @@ package com.example.finaldesign.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,17 +68,26 @@ public class Main2Activity extends SimpleActivity{
             LogUtil.e(content);
             initView();
         }else {
-            Intent intent = getIntent();
-            String addressCity = intent.getStringExtra("city");
-            if (addressCity != null){
+            String addressCity = getIntent().getStringExtra("cityName");
+            if (addressCity == null || addressCity.equals("")){
+                startActivityFinish(CitySearchActivity.class);
+            }else {
                 LogUtil.e(addressCity);
                 contentList.add(addressCity);
-                SharePreferencesUtils.put(mContext,CONTENTLIST,DataUtil.listToString(contentList));
+                SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
+                showLoading();
                 initView();
-            }else {
-                startActivityFinish(CitySearchActivity.class);
             }
         }
+    }
+
+    @Override
+    protected void fitSystem() {
+        View decorView = getWindow().getDecorView();
+        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        decorView.setSystemUiVisibility(option);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 
     @SuppressLint("RestrictedApi")
@@ -109,23 +117,20 @@ public class Main2Activity extends SimpleActivity{
         setIntent(intent);
         String cityName = getIntent().getStringExtra("cityName");
         LogUtil.d(cityName);
-        Boolean isExist = false;
         for (int i=0; i<contentList.size(); i++){
-            if (cityName.equals(contentList.get(i))){
+            if (contentList.get(i).contains(cityName)){
                 viewPager.setCurrentItem(i);
-                isExist = true;
                 LogUtil.i("城市已经存在");
+                return;
             }
         }
-        if (!isExist) {
-            contentList.add(cityName);
-            WeatherFragment2 weatherFragment = WeatherFragment2.newInstance(contentList, contentList.size() - 1);
-            fragmentList.add(weatherFragment);
-            adapter.notifyDataSetChanged();
-            viewPager.setCurrentItem(contentList.size()-1);
-            weatherFragment.lazyLoad();
-            SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
-        }
+        contentList.add(cityName);
+        WeatherFragment2 weatherFragment = WeatherFragment2.newInstance(contentList, contentList.size() - 1);
+        fragmentList.add(weatherFragment);
+        adapter.notifyDataSetChanged();
+        viewPager.setCurrentItem(contentList.size()-1);
+        weatherFragment.lazyLoad();
+        SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
     }
 
     /**
@@ -161,11 +166,16 @@ public class Main2Activity extends SimpleActivity{
         SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
     }
 
+    public void dismiss(){
+        dismissLoading();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (popupWindow!=null && popupWindow.isShowing())
             popupWindow.dismiss();
+        dismissLoading();
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

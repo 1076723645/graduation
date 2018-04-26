@@ -64,6 +64,11 @@ public class CityManagerActivity extends SimpleActivity {
         });
     }
 
+    @Override
+    protected void fitSystem() {
+
+    }
+
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.toolbar,menu);
         return true;

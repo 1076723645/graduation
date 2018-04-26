@@ -4,9 +4,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.example.finaldesign.R;
 import com.example.finaldesign.gson.Weather;
+import com.example.finaldesign.ui.widget.CircleBar;
 import com.example.finaldesign.util.LogUtil;
 import com.example.finaldesign.util.Utility;
 

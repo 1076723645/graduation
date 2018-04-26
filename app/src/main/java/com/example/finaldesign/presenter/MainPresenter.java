@@ -39,13 +39,17 @@ public class MainPresenter extends BasePresenter<MainView> {
         dataManager = new DataManager(mContext);
     }
 
-    public void getWeather(String cityName){
+    public void getWeatherMessage(String cityName){
         addSubscribe(dataManager.getWeatherMessage(cityName)
                              .compose(RxUtil.transformScheduler())
                              .subscribeWith(new CommonSubscriber<WeatherInfo>(mView) {
                                  @Override
                                  public void onNext(WeatherInfo weather) {
-                                     mView.loadWeatherInfoSuccess(weather);
+                                     if (weather.getHeWeather5().get(0).getStatus().equals("ok"))
+                                         mView.loadWeatherInfoSuccess(weather);
+                                     else {
+                                         mView.showErrorMsg(weather.getHeWeather5().get(0).getStatus());
+                                     }
                                  }
                              }));
     }

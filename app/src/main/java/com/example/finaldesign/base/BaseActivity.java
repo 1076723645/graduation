@@ -2,6 +2,7 @@ package com.example.finaldesign.base;
 
 
 
+
 /**
  * Created by hui on 2018/2/27.
  */
@@ -26,4 +27,10 @@ public abstract class BaseActivity<T extends Presenter> extends SimpleActivity i
         mPresenter.onStop();
     }
     protected abstract void initPresenter();
+
+
+    @Override
+    protected void fitSystem() {
+    }
+
 }

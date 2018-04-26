@@ -16,15 +16,10 @@
 
     <style name="SimpleTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="Background">@color/white</item>
-        <item name="TextColor">@color/text_color_black</item>
-        <item name="TextColor2">@color/reg_choose_color</item>
-        <item name="IndexColor">@color/index_bg_color</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <!--Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="NightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -56,6 +51,19 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimAmount">0.6</item>
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="CustomDialog" parent="android:style/Theme.Dialog">
+        <!--背景颜色及和透明程度-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--是否去除标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否模糊-->
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">

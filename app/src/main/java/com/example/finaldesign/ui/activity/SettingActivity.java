@@ -149,6 +149,7 @@ public class SettingActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
+        backButton.setOnClickListener(view -> onBackPressed());
       /*  cacheSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

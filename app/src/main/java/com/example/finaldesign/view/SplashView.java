@@ -13,4 +13,6 @@ public interface SplashView extends BaseView {
     void onLocationSuccess(Location location);
     //void loadSuccess();
     void getCitySuccess(CityMessage cityMessage);
+
+    void getChinese(String s);
 }

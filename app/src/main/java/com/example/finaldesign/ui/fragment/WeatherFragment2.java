@@ -20,6 +20,7 @@ import com.example.finaldesign.model.bean.WeatherBean;
 import com.example.finaldesign.model.bean.WeatherInfo;
 import com.example.finaldesign.presenter.MainPresenter;
 import com.example.finaldesign.ui.activity.AirDetailActivity;
+import com.example.finaldesign.ui.activity.Main2Activity;
 import com.example.finaldesign.ui.widget.CircleBar;
 import com.example.finaldesign.ui.widget.CompatToolbar;
 import com.example.finaldesign.ui.widget.MiuiWeatherView;
@@ -113,7 +114,6 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
     private List<String> contentList = new ArrayList<>();
     private int flag;
 
-    protected boolean isVisible;
     private String cityName;
 
     @Override
@@ -125,6 +125,11 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
             flag = bundle.getInt("flag");
             contentList = bundle.getStringArrayList("list");
         }
+    }
+
+    @Override
+    protected void initPresenter() {
+        mPresenter = new MainPresenter(mContext);
     }
 
     @Override
@@ -147,7 +152,7 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
         }
         swipeRefresh.setOnRefreshListener(() -> {
             if (NetUtils.isConnected(mContext)) {
-                mPresenter.getWeather(cityName);
+                mPresenter.getWeatherMessage(cityName);
             }else {
                 ToastUtil.shortShow("无网络连接，请检查网络");
                 swipeRefresh.setRefreshing(false);
@@ -156,31 +161,26 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
     }
 
     /**
-     * 网络懒加载
+     * 网络懒加载,更新数据
      */
     @Override
     public void lazyLoad() {
-        mPresenter.getWeather(cityName);
+        mPresenter.getWeatherMessage(cityName);
     }
 
     @Override
-    protected void initPresenter() {
-        mPresenter = new MainPresenter(mContext);
+    public void loadWeatherInfoSuccess(WeatherInfo weather) {
+        Main2Activity activity = (Main2Activity) mActivity;
+        activity.dismiss();
+        swipeRefresh.setRefreshing(false);
+        showWeatherInfo(weather);
+        String responseText = new Gson().toJson(weather, WeatherInfo.class);
+        SharePreferencesUtils.put(mContext, cityName, responseText);
     }
 
     @Override
     public void showErrorMsg(String msg) {
         ToastUtil.shortShow(msg);
-    }
-
-    @Override
-    public void loadWeatherInfoSuccess(WeatherInfo weather) {
-        swipeRefresh.setRefreshing(false);
-        if (weather.getHeWeather5().get(0).getStatus().equals("ok")){
-            showWeatherInfo(weather);
-        }
-        String responseText = new Gson().toJson(weather, WeatherInfo.class);
-        SharePreferencesUtils.put(mContext, cityName, responseText);
     }
 
     public static WeatherFragment2 newInstance(List<String> cityList, int flag){

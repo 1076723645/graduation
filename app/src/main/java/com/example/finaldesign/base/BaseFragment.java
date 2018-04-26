@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 
+
 /**
  * Created by hui on 2018/2/27.
  */
@@ -13,6 +14,7 @@ import android.view.View;
 public abstract class BaseFragment<T extends Presenter> extends SimpleFragment implements BaseView{
 
     protected T mPresenter;
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
