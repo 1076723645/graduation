@@ -59,7 +59,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     public void onLocationSuccess(Location location) {
-        ToastUtil.shortShow(location.getLatitude()+ "," +location.getLongitude());
         mPresenter.getCityMessage(String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()));
     }
 
@@ -72,7 +71,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     public void getChinese(String s) {
-        ToastUtil.shortShow(addressCity);
         Intent intent = new Intent(this, Main2Activity.class);
         intent.putExtra("cityName",addressCity);
         startActivity(intent);

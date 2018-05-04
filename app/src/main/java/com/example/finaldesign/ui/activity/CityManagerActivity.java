@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -64,11 +65,6 @@ public class CityManagerActivity extends SimpleActivity {
         });
     }
 
-    @Override
-    protected void fitSystem() {
-
-    }
-
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.toolbar,menu);
         return true;
@@ -84,9 +80,7 @@ public class CityManagerActivity extends SimpleActivity {
                 break;
             case android.R.id.home:
                 if (contentList.size() == 0){
-                    Intent intent1 = new Intent(CityManagerActivity.this, CitySearchActivity.class);
-                    startActivity(intent1);
-                    finish();
+                    startActivityFinish(CitySearchActivity.class);
                 }else {
                     onBackPressed();
                 }
@@ -94,6 +88,20 @@ public class CityManagerActivity extends SimpleActivity {
             default:
         }
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            if (contentList.size() == 0){
+                startActivityFinish(CitySearchActivity.class);
+            }else {
+                onBackPressed();
+            }
+            return false;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

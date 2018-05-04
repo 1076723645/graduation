@@ -29,9 +29,7 @@ public class CompatToolbar extends Toolbar {
     public void setup() {
         int compatPadingTop = 0;
         // android 4.4以上将Toolbar添加状态栏高度的上边距，沉浸到状态栏下方
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            compatPadingTop = getStatusBarHeight();
-        }
+        compatPadingTop = getStatusBarHeight();
         this.setPadding(getPaddingLeft(), getPaddingTop() + compatPadingTop, getPaddingRight(), getPaddingBottom());
     }
 

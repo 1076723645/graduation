@@ -52,7 +52,7 @@ public abstract class SimpleActivity extends SupportActivity {
 
     protected abstract int getLayoutId();
     protected abstract void initData();
-    protected abstract void fitSystem();
+    protected void fitSystem(){}
 
     protected void startActivity(Class<?> cls) {
         startActivity(getIntent(cls));
@@ -73,6 +73,7 @@ public abstract class SimpleActivity extends SupportActivity {
         loadingDialog.setCancelable(true);
         loadingDialog.show();
     }
+
     protected void dismissLoading(){
         if (loadingDialog!=null)
             loadingDialog.dismiss();

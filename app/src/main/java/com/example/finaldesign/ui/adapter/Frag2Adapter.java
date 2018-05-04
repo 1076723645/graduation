@@ -26,7 +26,7 @@ public class Frag2Adapter extends FragmentStatePagerAdapter {
         this.mContext = context;
     }
 
-    public void setData(ArrayList<WeatherFragment2> lists) {
+    public void setData(List<WeatherFragment2> lists) {
         this.fragments = lists;
     }
 

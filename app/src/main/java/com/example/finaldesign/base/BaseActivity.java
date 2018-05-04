@@ -29,8 +29,5 @@ public abstract class BaseActivity<T extends Presenter> extends SimpleActivity i
     protected abstract void initPresenter();
 
 
-    @Override
-    protected void fitSystem() {
-    }
 
 }

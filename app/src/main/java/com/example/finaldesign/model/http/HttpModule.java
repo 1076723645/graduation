@@ -29,20 +29,12 @@ public class HttpModule {
         }
         return instance;
     }
-    /*public static HttpModule getInstance(Context context,String url){
-        instance = null;
-        return new HttpModule(context,NEWBASEURL);
-    }*/
 
     private HttpModule(Context mContext){
         mCntext = mContext;
         init();
     }
-    /*private HttpModule(Context mContext,String url){
-        mCntext = mContext;
-        changeApiBaseUrl(url);
-    }
-*/
+
     private OkHttpClient createOkHttp(){
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -64,14 +56,4 @@ public class HttpModule {
     public BiSheApi getServer(){
         return mRetrofit.create(BiSheApi.class);
     }
-
-    /*private void changeApiBaseUrl(String newApiBaseUrl) {
-        BASE_URL = newApiBaseUrl;
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl(newApiBaseUrl)
-                .client(client)
-                .addConverterFactory(factory)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-    }*/
 }

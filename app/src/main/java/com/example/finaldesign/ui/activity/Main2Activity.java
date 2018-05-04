@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.internal.operators.observable.ObservableSubscribeOn;
 
 public class Main2Activity extends SimpleActivity{
 
@@ -97,7 +99,7 @@ public class Main2Activity extends SimpleActivity{
             fragmentList.add(weatherFragment);
         }
         adapter = new Frag2Adapter(getSupportFragmentManager(), this);
-        adapter.setData((ArrayList<WeatherFragment2>) fragmentList);
+        adapter.setData(fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
         iv_add.setOnClickListener(view -> {
@@ -128,7 +130,7 @@ public class Main2Activity extends SimpleActivity{
         WeatherFragment2 weatherFragment = WeatherFragment2.newInstance(contentList, contentList.size() - 1);
         fragmentList.add(weatherFragment);
         adapter.notifyDataSetChanged();
-        viewPager.setCurrentItem(contentList.size()-1);
+        viewPager.setCurrentItem(contentList.size()-1, false);
         weatherFragment.lazyLoad();
         SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
     }
@@ -142,7 +144,7 @@ public class Main2Activity extends SimpleActivity{
             case 1:
                 if (resultCode == RESULT_OK){
                     final int page = data.getIntExtra("data_return",0);
-                    viewPager.setCurrentItem(page);
+                    viewPager.setCurrentItem(page, false);
                     WeatherFragment2 weatherFragment = fragmentList.get(page);
                     weatherFragment.fullScroll();
                 }

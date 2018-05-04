@@ -7,22 +7,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.finaldesign.App;
 import com.example.finaldesign.R;
 import com.example.finaldesign.db.City;
 import com.example.finaldesign.db.County;
 import com.example.finaldesign.db.Province;
+import com.example.finaldesign.util.DataUtil;
 import com.example.finaldesign.util.HttpUtil;
 import com.example.finaldesign.util.LogUtil;
 import com.example.finaldesign.util.NetUtils;
+import com.example.finaldesign.util.SharePreferencesUtils;
 import com.example.finaldesign.util.ToastUtil;
 import com.example.finaldesign.util.Utility;
 
@@ -45,13 +47,14 @@ public class CitySearchActivity extends AppCompatActivity {
     private List<Province> provinceList;
     private List<City> cityList;
     private List<County> countyList;
+    private List<String> contentList = new ArrayList<>();
 
     private int currentLevel;//当前选中的级别
 
     private Province selectedProvince;//选中的省
     private City selectedCity;
     private ProgressDialog progressDialog;
-    private TextView noNework;
+    private TextView noNetwork;
     private TextView test;
     private ArrayAdapter<String> adapter;
     private ImageView backButton;
@@ -72,14 +75,18 @@ public class CitySearchActivity extends AppCompatActivity {
         initListener();
     }
     private void initView(){
+        String content = SharePreferencesUtils.getString(this , "contentList", "");
+        if (!content.equals("")) {
+            contentList = new ArrayList<>(DataUtil.stringToList(content));
+        }
         backButton = findViewById(R.id.iv_back);
         test = findViewById(R.id.tv_name);
-        noNework = findViewById(R.id.tv_no_network);
+        noNetwork = findViewById(R.id.tv_no_network);
         listView = findViewById(R.id.list);
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,dataList);
         listView.setAdapter(adapter);
         if (!NetUtils.isConnected(this)){
-            noNework.setVisibility(View.VISIBLE);
+            noNetwork.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
             test.setText("添加城市");
         }
@@ -106,9 +113,9 @@ public class CitySearchActivity extends AppCompatActivity {
                 finish();
             }
         });
-        noNework.setOnClickListener(v -> {
+        noNetwork.setOnClickListener(v -> {
             if (NetUtils.isConnected(this)){
-                noNework.setVisibility(View.GONE);
+                noNetwork.setVisibility(View.GONE);
                 listView.setVisibility(View.VISIBLE);
                 queryProvinces();
             }else {
@@ -120,13 +127,28 @@ public class CitySearchActivity extends AppCompatActivity {
                 queryCities();
             }else if (currentLevel == LEVEL_CITY){
                 queryProvinces();
+            }else {
+                if (contentList == null || contentList.size() == 0){
+                    App.getInstance().exitApp();
+                }else {
+                    onBackPressed();
+                }
             }
         });
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK && contentList.size() == 0)) {
+            App.getInstance().exitApp();
+            return false;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
     private void queryProvinces(){
         test.setText("中国");
-        backButton.setVisibility(View.GONE);
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size()>0){
             dataList.clear();

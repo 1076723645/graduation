@@ -19,6 +19,7 @@ import com.example.finaldesign.view.SplashView;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -97,25 +98,29 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                              }));
     }
 
+    //判断是不是全是中文
     public void isChinese(String s){
         char[] ch = s.toCharArray();
         for (char c : ch) {
-            if (isChinese(c)) {
-                mView.getChinese(s);
+            if (!isChinese(c)) {
+                mView.showErrorMsg("notChinese");
                 return;
             }
         }
-        mView.showErrorMsg("notChinese");
+        mView.getChinese(s);
     }
 
+    // GENERAL_PUNCTUATION 判断中文的“号
+    // CJK_SYMBOLS_AND_PUNCTUATION 判断中文的。号
+    // HALFWIDTH_AND_FULLWIDTH_FORMS 判断中文的，号
     private static boolean isChinese(char c) {
         Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
         if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
                 || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
                 || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
-                || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+                /*|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
                 || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
-                || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
+                || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS*/) {
             return true;
         }
         return false;

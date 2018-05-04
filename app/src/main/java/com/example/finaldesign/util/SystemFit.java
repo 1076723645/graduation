@@ -25,10 +25,10 @@ public class SystemFit {
             decorView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-        else if (Build.VERSION.SDK_INT >= 21){
+        else{
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                                                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            activity.getWindow().setStatusBarColor(Color.DKGRAY);
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
 }

@@ -5,6 +5,7 @@ import com.example.finaldesign.model.bean.WeatherInfo;
 import com.example.finaldesign.model.http.HttpResponse;
 
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -25,4 +26,5 @@ public interface BiSheApi {
      */
     @GET("https://free-api.heweather.com/v5/weather")
     Flowable<WeatherInfo> getWeatherInfo(@Query("city") String name, @Query("key") String key);
+
 }

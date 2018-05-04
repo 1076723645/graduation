@@ -23,6 +23,7 @@
                 <include layout="@layout/hour_forest"/>
                 <include layout="@layout/quality_forest"/>
                 <include layout="@layout/item_suggest"/>
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>

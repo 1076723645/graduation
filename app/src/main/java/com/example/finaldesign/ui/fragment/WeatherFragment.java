@@ -199,7 +199,7 @@ public class WeatherFragment extends Fragment implements NestedScrollView.OnScro
                 final String responseText = response.body().string();
                 final Weather weather = Utility.handleWeatherResponse(responseText);
                 getActivity().runOnUiThread(() -> {
-                    if (weather!=null&&"ok".equals(weather.status)){
+                    if (weather != null && "ok".equals(weather.status)){
                         //Log.i("weather",weather.toString());
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
                         editor.putString(weatherId,responseText);
