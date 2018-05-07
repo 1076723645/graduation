@@ -130,7 +130,7 @@ public class Main2Activity extends SimpleActivity{
         WeatherFragment2 weatherFragment = WeatherFragment2.newInstance(contentList, contentList.size() - 1);
         fragmentList.add(weatherFragment);
         adapter.notifyDataSetChanged();
-        viewPager.setCurrentItem(contentList.size()-1, false);
+        viewPager.setCurrentItem(contentList.size()-1);
         weatherFragment.lazyLoad();
         SharePreferencesUtils.put(mContext, CONTENTLIST, DataUtil.listToString(contentList));
     }

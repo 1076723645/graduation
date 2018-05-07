@@ -200,9 +200,14 @@ public class WeatherFragment2 extends BaseFragment<MainPresenter> implements Mai
         String weatherInfo = weatherBean.getNow().getCond().getTxt();
         String wind = weatherBean.getNow().getWind().getDir();
         String windlv = weatherBean.getNow().getWind().getSc();
-        String pm25 = weatherBean.getAqi().getCity().getPm25();
-        String quality = weatherBean.getAqi().getCity().getQlty();
-        String aqi = weatherBean.getAqi().getCity().getAqi();
+        String pm25 = "0";
+        String quality = "良";
+        String aqi = "0";
+        if (weatherBean.getAqi() != null){
+            pm25 = weatherBean.getAqi().getCity().getPm25();
+            quality = weatherBean.getAqi().getCity().getQlty();
+            aqi = weatherBean.getAqi().getCity().getAqi();
+        }
         // String sunRise = null,sunSet = null;
         if (windlv.equals("微风")){
             windlv = "1";

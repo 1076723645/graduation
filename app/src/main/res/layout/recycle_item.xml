@@ -64,7 +64,7 @@
                 android:layout_marginStart="24dp"
                 android:textColor="@color/color_66"
                 android:textSize="12sp"
-                tools:text="空气良"/>
+                android:text="空气良"/>
             <View
                 android:layout_width="1dp"
                 android:layout_height="15dp"

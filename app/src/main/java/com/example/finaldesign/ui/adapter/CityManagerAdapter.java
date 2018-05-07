@@ -72,7 +72,8 @@ public class CityManagerAdapter extends RecyclerView.Adapter<CityManagerAdapter.
         holder.min.setText(weatherBean.getDaily_forecast().get(0).getTmp().getMin() + "°");
         holder.wind.setText(weatherBean.getNow().getWind().getDir() + windLv + "级");
         holder.hum.setText("湿度" + weatherBean.getNow().getHum() + "%");
-        holder.airQul.setText("空气" + weatherBean.getAqi().getCity().getQlty());
+        if (weatherBean.getAqi() != null)
+            holder.airQul.setText("空气" + weatherBean.getAqi().getCity().getQlty());
         holder.address.setText(weatherBean.getBasic().getCity());
         holder.cond.setImageResource(DataUtil.getWeatherColourPng(weatherBean.getNow().getCond().getTxt()));
     }
